@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hosppy-configmap
+data:
+  SPRING_PROFILES_ACTIVE: test
+  SERVER_PORT: "80"
+  SIGNING_SECRET: your_signing_secret
+  EMAIL_SERVICE_ENDPOINT: http://email-service
+  ACCOUNT_SERVICE_ENDPOINT: http://account-service
+  ACCOUNT_DATASOURCE_URL: jdbc:mysql://mysql-svc/hosppy_account?useUnicode=true&characterEncoding=utf-8
+  ACCOUNT_DATASOURCE_USERNAME: root
+  ACCOUNT_DATASOURCE_PASSWORD: root
+  HOSPITAL_DATASOURCE_URL: jdbc:mysql://mysql-svc/hosppy_hospital?useUnicode=true&characterEncoding=utf-8
+  HOSPITAL_DATASOURCE_USERNAME: root
+  HOSPITAL_DATASOURCE_PASSWORD: root
+  ALIYUN_ACCESS_KEY: YOUR_ALIYUN_ACCESS_KEY
+  ALIYUN_ACCESS_SECRET: YOUR_ALIYUN_ACCESS_SECRET

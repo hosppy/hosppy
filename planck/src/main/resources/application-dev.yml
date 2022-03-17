@@ -1,0 +1,17 @@
+server:
+  port: 80
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: account_route
+          uri: http://localhost:8002
+          predicates:
+            - Host=account.hosppy.local
+        - id: hospital_route
+          uri: http://localhost:8003
+          predicates:
+            - Host=hospital.hosppy.local
+
+hosppy:
+  signing-secret: ${SIGNING_SECRET:signing-secret}

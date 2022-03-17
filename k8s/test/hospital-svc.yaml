@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hospital-svc-deployment
+  labels:
+    app: hospital-svc
+spec:
+  selector:
+    matchLabels:
+      app: hospital-svc
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: hospital-svc
+        env: test
+    spec:
+      containers:
+        - name: hospital-svc
+          image: hosppy/hospital-svc
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 80
+          envFrom:
+            - configMapRef:
+                name: hosppy-configmap
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hospital-service
+spec:
+  selector:
+    app: hospital-svc
+    env: test
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80

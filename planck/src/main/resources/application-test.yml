@@ -1,0 +1,12 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: account_route
+          uri: http://account-service
+          predicates:
+            - Host=account.hosppy.local
+        - id: hospital_route
+          uri: http://account-service
+          predicates:
+            - Host=hospital.hosppy.local

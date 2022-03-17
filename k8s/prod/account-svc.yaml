@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: account-svc-deployment
+  labels:
+    app: account-svc
+spec:
+  selector:
+    matchLabels:
+      app: account-svc
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: account-svc
+        env: prod
+    spec:
+      containers:
+        - name: account-svc
+          image: hosppy/account-svc
+          ports:
+            - containerPort: 80
+          envFrom:
+            - configMapRef:
+                name: hosppy-configmap
+          volumeMounts:
+            - name: logback-config-volume
+              mountPath: /etc/hosppy
+      volumes:
+        - name: logback-config-volume
+          configMap:
+            name: logback-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: account-service
+spec:
+  selector:
+    app: account-svc
+    env: prod
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80

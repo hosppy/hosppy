@@ -1,0 +1,17 @@
+server:
+  port: 80
+
+edison:
+  enable_programmatic_mapping: false
+  tracing:
+    enabled: false
+  mappings:
+    - name: edison_route
+      host: edison.hosppy.local
+      destinations: httpbin.org
+    - name: account_route
+      host: account.hosppy.local
+      destinations: localhost:8002
+    - name: hospitla_route
+      host: hospital.hosppy.local
+      destinations: localhost:8003

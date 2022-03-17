@@ -1,0 +1,58 @@
+version: '3.7'
+
+services:
+  account-service:
+    build: account-svc
+    image: hosppy/account-svc
+    environment:
+      - SPRING_PROFILES_ACTIVE
+      - SERVER_PORT
+      - ACCOUNT_DATASOURCE_URL
+      - ACCOUNT_DATASOURCE_USERNAME
+      - ACCOUNT_DATASOURCE_PASSWORD
+    depends_on:
+      - email-service
+    networks:
+      - internal_access
+      - external_access
+  email-service:
+    build: email-svc
+    image: hosppy/email-svc
+    environment:
+      - SPRING_PROFILES_ACTIVE
+      - SERVER_PORT
+      - ALIYUN_ACCESS_KEY
+      - ALIYUN_ACCESS_SECRET
+    networks:
+      - internal_access
+  hospital-service:
+    build: hospital-svc
+    image: hosppy/hospital-svc
+    environment:
+      - SPRING_PROFILES_ACTIVE
+      - SERVER_PORT
+      - HOSPITAL_DATASOURCE_URL
+      - HOSPITAL_DATASOURCE_USERNAME
+      - HOSPITAL_DATASOURCE_PASSWORD
+    networks:
+      - internal_access
+      - external_access
+  planck-service:
+    build: planck
+    image: hosppy/planck-svc
+    ports:
+      - "80:80"
+    environment:
+      - SPRING_PROFILES_ACTIVE
+      - SERVER_PORT
+    depends_on:
+      - account-service
+      - hospital-service
+    networks:
+      - internal_access
+      - external_access
+
+networks:
+  internal_access:
+    internal: true
+  external_access:

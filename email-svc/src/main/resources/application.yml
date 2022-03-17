@@ -1,0 +1,9 @@
+spring:
+  profiles:
+    active: dev
+  application:
+    name: email-service
+
+hosppy:
+  aliyun-access-key: ${ALIYUN_ACCESS_KEY}
+  aliyun-access-secret: ${ALIYUN_ACCESS_SECRET}

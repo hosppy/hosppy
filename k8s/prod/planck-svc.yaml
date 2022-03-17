@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: planck-svc-deployment
+  labels:
+    app: planck-svc
+spec:
+  selector:
+    matchLabels:
+      app: planck-svc
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: planck-svc
+        env: prod
+    spec:
+      containers:
+        - name: planck-svc
+          image: hosppy/planck-svc
+          ports:
+            - containerPort: 80
+          envFrom:
+            - configMapRef:
+                name: hosppy-configmap
+          volumeMounts:
+            - name: logback-config-volume
+              mountPath: /etc/hosppy
+      volumes:
+        - name: logback-config-volume
+          configMap:
+            name: logback-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: planck-service
+spec:
+  selector:
+    app: planck-svc
+    env: prod
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      nodePort: 30001
+  type: NodePort

@@ -1,0 +1,8 @@
+server:
+  port: 8003
+spring:
+  jpa:
+    show-sql: true
+  devtools:
+    livereload:
+      port: 35731
