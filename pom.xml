@@ -7,7 +7,7 @@
     <groupId>club.hosppy</groupId>
     <artifactId>hosppy-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.0</version>
+    <version>1.0-SNAPSHOT</version>
     <name>Hosppy MicroServices Training Project</name>
 
     <modules>
@@ -28,6 +28,7 @@
         <maven.compiler.target>11</maven.compiler.target>
         <spring-boot.version>2.6.4</spring-boot.version>
         <spring-cloud.version>2021.0.1</spring-cloud.version>
+        <common-lib.version>1.0.0-SNAPSHOT</common-lib.version>
     </properties>
 
     <dependencyManagement>
@@ -59,7 +60,7 @@
             <dependency>
                 <groupId>club.hosppy</groupId>
                 <artifactId>common-lib</artifactId>
-                <version>1.0.0</version>
+                <version>${common-lib.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

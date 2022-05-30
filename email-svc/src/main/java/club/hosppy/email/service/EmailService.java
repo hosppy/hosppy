@@ -24,10 +24,10 @@ public class EmailService {
 
     @Async(AppConfig.ASYNC_EXECUTOR_NAME)
     public void sendEmailAsync(EmailRequest request) {
-        IToLog logContext = () -> new Object[]{
-                "subject", request.getSubject(),
-                "to", request.getTo(),
-                "html_body", request.getHtmlBody()
+        IToLog logContext = () -> new Object[] {
+            "subject", request.getSubject(),
+            "to", request.getTo(),
+            "html_body", request.getHtmlBody()
         };
 
         SingleSendMailRequest mailRequest = new SingleSendMailRequest();
@@ -40,10 +40,9 @@ public class EmailService {
         mailRequest.setHtmlBody(request.getHtmlBody());
 
         try {
-            SingleSendMailResponse mailResponse = acsClient.getAcsResponse(mailRequest);
-            logger.info("Successfully send email - request id : " + mailResponse.getRequestId(), logContext);
+            acsClient.getAcsResponse(mailRequest);
         } catch (ClientException e) {
-            e.printStackTrace();
+            logger.error("Failed send email", logContext);
         }
     }
 }
