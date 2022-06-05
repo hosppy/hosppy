@@ -3,6 +3,3 @@ server:
 spring:
   jpa:
     show-sql: true
-  devtools:
-    livereload:
-      port: 35731
