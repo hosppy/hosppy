@@ -9,7 +9,7 @@
         <withJansi>true</withJansi>
         <encoder>
             <pattern>%d{dd-MM-yyyy HH:mm:ss.SSS} %magenta([%thread]) %highlight(%-5level) %logger{36}.%M - %msg%n</pattern>
-        </encoder>xw
+        </encoder>
     </appender>
 
     <root level="info">
