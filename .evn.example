@@ -6,8 +6,5 @@ EMAIL_SERVICE_ENDPOINT=http://email-service
 ACCOUNT_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3306/hosppy_account?useUnicode=true&characterEncoding=utf-8
 ACCOUNT_DATASOURCE_USERNAME=root
 ACCOUNT_DATASOURCE_PASSWORD=root
-HOSPITAL_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3306/hosppy_hospital?useUnicode=true&characterEncoding=utf-8
-HOSPITAL_DATASOURCE_USERNAME=root
-HOSPITAL_DATASOURCE_PASSWORD=root
 ALIYUN_ACCESS_KEY=your_aliyun_access_key
 ALIYUN_ACCESS_SECRET=your_aliyun_access_secret

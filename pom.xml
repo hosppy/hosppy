@@ -18,8 +18,6 @@
         <module>email-api</module>
         <module>email-svc</module>
         <module>planck</module>
-        <module>hospital-svc</module>
-        <module>hospital-api</module>
     </modules>
 
     <properties>
