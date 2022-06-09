@@ -1,0 +1,41 @@
+kind: pipeline
+type: docker
+name: default
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+  - name: build
+    image: maven:3-jdk-11
+    volumes:
+      - name: cache
+        path: /root/.m2
+    commands:
+      - mvn clean package
+
+  - name: publish
+    image: hosppy/docker
+    environment:
+      DOCKER_USERNAME:
+        from_secret: DOCKER_USERNAME
+      DOCKER_PASSWORD:
+        from_secret: DOCKER_PASSWORD
+      DOCKER_REGISTRY:
+        from_secret: DOCKER_REGISTRY
+      DOCKER_REPO:
+        from_secret: DOCKER_REPO
+    volumes:
+      - name: docker
+        path: /var/run/docker.sock
+    commands:
+      - bash ./scripts/publish.sh
+
+volumes:
+  - name: cache
+    host:
+      path: /tmp/cache
+  - name: docker
+    host:
+      path: /var/run/docker.sock
