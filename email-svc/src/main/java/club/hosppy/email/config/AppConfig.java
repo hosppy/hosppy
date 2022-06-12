@@ -2,10 +2,8 @@ package club.hosppy.email.config;
 
 import club.hosppy.common.config.HosppyRestConfig;
 import club.hosppy.email.EmailConstant;
-import com.aliyuncs.DefaultAcsClient;
-import com.aliyuncs.IAcsClient;
-import com.aliyuncs.profile.DefaultProfile;
-import com.aliyuncs.profile.IClientProfile;
+import com.aliyun.dm20151123.Client;
+import com.aliyun.teaopenapi.models.Config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -31,9 +29,13 @@ public class AppConfig {
     private String aliyunAccessSecret;
 
     @Bean
-    public IAcsClient acsClient() {
-        IClientProfile profile = DefaultProfile.getProfile(EmailConstant.ALIYUN_REGION_ID, aliyunAccessKey, aliyunAccessSecret);
-        return new DefaultAcsClient(profile);
+    public Client client() throws Exception {
+        Config config = new Config()
+                .setAccessKeyId(aliyunAccessKey)
+                .setAccessKeySecret(aliyunAccessSecret)
+                .setRegionId(EmailConstant.ALIYUN_REGION_ID)
+                .setEndpoint(EmailConstant.ALIYUN_ENDPOINT);
+        return new Client(config);
     }
 
     @Bean(ASYNC_EXECUTOR_NAME)

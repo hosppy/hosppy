@@ -29,6 +29,7 @@ services:
       - MAIL_FROM_NAME
     networks:
       - internal_access
+      - external_access
   planck-service:
     build: planck
     image: hosppy/planck-svc

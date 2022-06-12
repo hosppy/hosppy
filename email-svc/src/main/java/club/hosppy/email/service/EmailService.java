@@ -3,10 +3,10 @@ package club.hosppy.email.service;
 import club.hosppy.email.config.AppConfig;
 import club.hosppy.email.config.MailConfig;
 import club.hosppy.email.dto.EmailRequest;
-import com.aliyuncs.IAcsClient;
-import com.aliyuncs.dm.model.v20151123.SingleSendMailRequest;
-import com.aliyuncs.dm.model.v20151123.SingleSendMailResponse;
-import com.aliyuncs.exceptions.ClientException;
+import com.aliyun.dm20151123.Client;
+import com.aliyun.dm20151123.models.SingleSendMailRequest;
+import com.aliyun.dm20151123.models.SingleSendMailResponse;
+import com.aliyun.teautil.models.RuntimeOptions;
 import com.github.structlog4j.ILogger;
 import com.github.structlog4j.IToLog;
 import com.github.structlog4j.SLoggerFactory;
@@ -20,7 +20,7 @@ public class EmailService {
 
     private static final ILogger logger = SLoggerFactory.getLogger(EmailService.class);
 
-    private final IAcsClient acsClient;
+    private final Client client;
 
     private final MailConfig mailConfig;
 
@@ -42,10 +42,11 @@ public class EmailService {
         mailRequest.setSubject(request.getSubject());
         mailRequest.setHtmlBody(request.getHtmlBody());
 
+        RuntimeOptions options = new RuntimeOptions();
         try {
-            SingleSendMailResponse response = acsClient.getAcsResponse(mailRequest);
-            logger.info("Successfully send email - request id : " + response.getRequestId(), logContext);
-        } catch (ClientException e) {
+            SingleSendMailResponse response = client.singleSendMailWithOptions(mailRequest, options);
+            logger.info("Successfully send email - request id : " + response.body.requestId, logContext);
+        } catch (Exception e) {
             logger.error("Failed send email", e);
         }
     }
