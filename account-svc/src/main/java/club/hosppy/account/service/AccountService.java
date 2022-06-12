@@ -12,7 +12,7 @@ import club.hosppy.email.client.EmailClient;
 import club.hosppy.email.dto.EmailRequest;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,8 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,6 +40,9 @@ public class AccountService {
     private final EntityManager entityManager;
 
     private final PasswordEncoder passwordEncoder;
+
+    @Value("${hosppy.web-domain}")
+    private String webDomain;
 
     public AccountDto get(String userId) {
         Account account = accountRepository.findAccountById(userId);
@@ -64,30 +65,14 @@ public class AccountService {
                 throw new ServiceException("A user with that email already exists. Try a password reset");
             }
         }
-        if (StringUtils.hasText(phoneNumber)) {
-            Account foundAccount = accountRepository.findAccountByPhoneNumber(phoneNumber);
-            if (foundAccount != null) {
-                throw new ServiceException("A user with that phone number already exists. Try a password reset");
-            }
-        }
-
-        if (name == null) {
-            name = "";
-        }
-        if (email == null) {
-            email = "";
-        }
-        if (phoneNumber == null) {
-            phoneNumber = "";
-        }
 
         Account account = Account.builder()
-                .email(email)
-                .name(name)
+                .name(name == null ? email : name)
                 .phoneNumber(phoneNumber)
+                .email(email)
+                .photoUrl("")
+                .memberSince(Instant.now())
                 .build();
-        account.setPhotoUrl("");
-        account.setMemberSince(Instant.now());
 
         try {
             accountRepository.save(account);
@@ -97,13 +82,9 @@ public class AccountService {
         }
 
         if (StringUtils.hasText(email)) {
-            String emailName = name;
-            if (StringUtils.hasText(emailName)) {
-                emailName = "there";
-            }
+            String emailName = name == null ? "there" : name;
 
-            String subject = "Activate your Hosppy account";
-            this.sendEmail(account.getId(), email, emailName, subject, AccountConstant.ACTIVATE_ACCOUNT_TMPL, true);
+            this.sendActivateEmail(account.getId(), email, emailName);
         }
 
         return this.convertToDto(account);
@@ -132,12 +113,11 @@ public class AccountService {
         }
     }
 
-    public void sendActivateEmail(String userId, String email, String name, String subject) {
+    public void sendActivateEmail(String userId, String email, String name) {
+        String subject = "Activate your Hosppy account";
         String token = createToken(userId, email);
 
-        String path = "/activate/" + token;
-
-        URI link = createLink(path);
+        String link = webDomain + "/activate/" + token;
 
         String htmlBody = String.format(AccountConstant.ACTIVATE_ACCOUNT_TMPL, name, link, link, link);
 
@@ -151,7 +131,7 @@ public class AccountService {
         try {
             emailClient.send(emailRequest);
         } catch (Exception e) {
-            throw new ServiceException("Unable to send email", e);
+            throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, "Unable to send email", e);
         }
     }
 
@@ -165,62 +145,6 @@ public class AccountService {
             return Sign.generateEmailConfirmationToken(userId, email, "signing");
         } catch (Exception e) {
             throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, "Could not create token", e);
-        }
-    }
-
-    private URI createLink(String path) {
-        try {
-            return new URI("http", "www.hosppy.com" + path, null);
-        } catch (URISyntaxException e) {
-            throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, "Could not create activate or confirm link", e);
-        }
-    }
-
-    private void sendEmail(String userId, String email, String name, String subject, String tempalte,
-                           boolean activateOrConfirm) {
-        String token;
-        try {
-            // TODO config signing secret
-            token = Sign.generateEmailConfirmationToken(userId, email, "signing");
-        } catch (Exception e) {
-            throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, "Could not create token", e);
-        }
-
-        String pathFormat = "/activate/%s";
-        if (!activateOrConfirm) {
-            pathFormat = "/reset/%s";
-        }
-        String path = String.format(pathFormat, token);
-
-        URI link;
-        try {
-            link = new URI("http", "www.hosppy.com" + path, null);
-        } catch (URISyntaxException e) {
-            String errMsg = "Could not create activation url";
-            if (!activateOrConfirm) {
-                errMsg = "Could not create reset url";
-            }
-            throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, errMsg, e);
-        }
-
-        String htmlBody;
-        if (!activateOrConfirm) {
-            htmlBody = String.format(tempalte, name, link, link, link);
-        } else {
-            htmlBody = String.format(tempalte, link, link);
-        }
-
-        EmailRequest emailRequest = EmailRequest.builder()
-                .to(email)
-                .name(name)
-                .subject(subject)
-                .htmlBody(htmlBody)
-                .build();
-
-        try {
-            emailClient.send(emailRequest);
-        } catch (Exception e) {
-            throw new ServiceException(ResultCode.BAD_REQUEST, "Unable to send email", e);
         }
     }
 

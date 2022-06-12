@@ -1,6 +1,7 @@
 SPRING_PROFILES_ACTIVE=dev
 SERVER_PORT=80
 SIGNING_SECRET=your_signing_secret
+WEB_DOMAIN=http://localhost:4000
 ACCOUNT_SERVICE_ENDPOINT=http://account-service
 EMAIL_SERVICE_ENDPOINT=http://email-service
 ACCOUNT_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3306/hosppy_account?useUnicode=true&characterEncoding=utf-8
@@ -8,3 +9,5 @@ ACCOUNT_DATASOURCE_USERNAME=root
 ACCOUNT_DATASOURCE_PASSWORD=root
 ALIYUN_ACCESS_KEY=your_aliyun_access_key
 ALIYUN_ACCESS_SECRET=your_aliyun_access_secret
+MAIL_FROM=hosppy@mail.hosppy.cn
+MAIL_FROM_NAME=hosppy

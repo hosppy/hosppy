@@ -7,3 +7,5 @@ spring:
 hosppy:
   aliyun-access-key: ${ALIYUN_ACCESS_KEY}
   aliyun-access-secret: ${ALIYUN_ACCESS_SECRET}
+  mail-from: ${MAIL_FROM}
+  mail-from-name: ${MAIL_FROM_NAME}

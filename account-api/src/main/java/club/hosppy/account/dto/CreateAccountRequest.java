@@ -26,6 +26,6 @@ public class CreateAccountRequest {
 
     @AssertTrue(message = "Empty request")
     private boolean isValidRequest() {
-        return StringUtils.hasText(name) || StringUtils.hasText(email) || StringUtils.hasText(phoneNumber);
+        return StringUtils.hasText(email);
     }
 }

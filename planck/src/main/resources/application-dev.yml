@@ -5,13 +5,11 @@ spring:
     gateway:
       routes:
         - id: account_route
-          uri: http://localhost:8002
+          uri: ${ACCOUNT_SERVICE_ENDPOINT:http://localhost:8002}
           predicates:
-            - Host=account.hosppy.local
-        - id: hospital_route
-          uri: http://localhost:8003
-          predicates:
-            - Host=hospital.hosppy.local
+            - Path=/api/**
+          filters:
+            - StripPrefix=1
 
 hosppy:
   signing-secret: ${SIGNING_SECRET:signing-secret}

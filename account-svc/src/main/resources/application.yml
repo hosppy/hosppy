@@ -13,4 +13,5 @@ spring:
     open-in-view: false
 
 hosppy:
-  email-service-endpoint: ${EMAIL_SERVICE_ENDPOINT:http://email-service:8080}
+  email-service-endpoint: ${EMAIL_SERVICE_ENDPOINT}
+  web-domain: ${WEB_DOMAIN}

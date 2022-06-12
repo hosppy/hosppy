@@ -10,6 +10,8 @@ services:
       - ACCOUNT_DATASOURCE_URL
       - ACCOUNT_DATASOURCE_USERNAME
       - ACCOUNT_DATASOURCE_PASSWORD
+      - EMAIL_SERVICE_ENDPOINT
+      - WEB_DOMAIN
     depends_on:
       - email-service
     networks:
@@ -23,6 +25,8 @@ services:
       - SERVER_PORT
       - ALIYUN_ACCESS_KEY
       - ALIYUN_ACCESS_SECRET
+      - MAIL_FROM
+      - MAIL_FROM_NAME
     networks:
       - internal_access
   planck-service:
@@ -33,8 +37,19 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE
       - SERVER_PORT
+      - ACCOUNT_SERVICE_ENDPOINT
     depends_on:
       - account-service
+    networks:
+      - internal_access
+      - external_access
+  web-service:
+    build: web
+    image: hosppy/web
+    ports:
+      - "80:80"
+    depends_on:
+      - planck-service
     networks:
       - internal_access
       - external_access

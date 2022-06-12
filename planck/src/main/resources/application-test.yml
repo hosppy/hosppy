@@ -3,10 +3,8 @@ spring:
     gateway:
       routes:
         - id: account_route
-          uri: http://account-service
+          uri: ${ACCOUNT_SERVICE_ENDPOINT}
           predicates:
-            - Host=account.hosppy.local
-        - id: hospital_route
-          uri: http://account-service
-          predicates:
-            - Host=hospital.hosppy.local
+            - Path=/api/**
+            filters:
+              - StripPrefix=1
