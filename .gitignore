@@ -34,5 +34,6 @@ config/*.yml
 .env
 
 ### K8s Credentials
+k8s/dev/config.yaml
 k8s/test/config/config.yaml
 k8s/prod/config/config.yaml
