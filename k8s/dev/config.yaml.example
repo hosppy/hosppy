@@ -2,8 +2,9 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: hosppy-configmap
+  namespace: hosppy-system
 data:
-  SPRING_PROFILES_ACTIVE: prod
+  SPRING_PROFILES_ACTIVE: test
   SERVER_PORT: "80"
   SIGNING_SECRET: your_signing_secret
   WEB_DOMAIN: your_web_domain

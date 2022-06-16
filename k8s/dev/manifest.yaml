@@ -1,0 +1,169 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: hosppy-system
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: account-svc-deployment
+  namespace: hosppy-system
+  labels:
+    app: account-svc
+spec:
+  selector:
+    matchLabels:
+      app: account-svc
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: account-svc
+        env: dev
+    spec:
+      containers:
+        - name: account-svc
+          image: hosppy/account-svc
+          ports:
+            - containerPort: 80
+          envFrom:
+            - configMapRef:
+                name: hosppy-configmap
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: hosppy-system
+  name: account-service
+spec:
+  selector:
+    app: account-svc
+    env: dev
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: email-svc-deployment
+  namespace: hosppy-system
+  labels:
+    app: email-svc
+spec:
+  selector:
+    matchLabels:
+      app: email-svc
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: email-svc
+        env: dev
+    spec:
+      containers:
+        - name: email-svc
+          image: hosppy/email-svc
+          ports:
+            - containerPort: 80
+          envFrom:
+            - configMapRef:
+                name: hosppy-configmap
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: email-service
+  namespace: hosppy-system
+spec:
+  selector:
+    app: email-svc
+    env: dev
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: planck-deployment
+  namespace: hosppy-system
+  labels:
+    app: planck
+spec:
+  selector:
+    matchLabels:
+      app: planck
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: planck
+        env: dev
+    spec:
+      containers:
+        - name: planck
+          image: hosppy/planck
+          ports:
+            - containerPort: 80
+          envFrom:
+            - configMapRef:
+                name: hosppy-configmap
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: planck-service
+  namespace: hosppy-system
+spec:
+  selector:
+    app: planck
+    env: dev
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-svc
+  namespace: hosppy-system
+spec:
+  type: ClusterIP
+  ports:
+    - port: 3306
+      targetPort: 3306
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: mysql-svc
+  namespace: hosppy-system
+subsets:
+  - addresses:
+      - ip: 192.168.0.103
+    ports:
+      - port: 3306
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: http-ingress
+  namespace: hosppy-system
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  rules:
+  -  http:
+        paths:
+          - path: /
+            backend:
+              serviceName: web-service
+              servicePort: 80
+          - path: /api
+            backend:
+              serviceName: planck-service
+              servicePort: 80
