@@ -15,7 +15,7 @@ steps:
     commands:
       - mvn clean package
 
-  - name: publish
+  - name: push
     image: hosppy/docker:alpine
     environment:
       DOCKER_USERNAME:
@@ -30,7 +30,7 @@ steps:
       - name: docker
         path: /var/run/docker.sock
     commands:
-      - bash ./scripts/publish.sh
+      - bash ./scripts/push.sh
 
   - name: dingtalk
     image: lddsb/drone-dingtalk-message
