@@ -17,16 +17,16 @@
 - `SPRING_PROFILES_ACTIVE`：**test**：应用程序运行模式。"dev"，"test"，"prod"
 - `SERVER_PORT`：**80**：应用程序运行时开放端口
 - `SIGNING_SECRET`："<empty>"：用户密码加密密钥
-- `ACCOUNT_SERVICE_ENDPOINT`：**http//account-service**：账号服务访问端点
+- `WEB_DOMAIN`："<empty>"：网站域名地址
+- `ACCOUNT_SERVICE_ENDPOINT`：**http://account-service**：账号服务访问端点
 - `EMAIL_SERVICE_ENDPOINT`：**http://email-service**：邮件服务访问端点
 - `ACCOUNT_DATASOURCE_URL`："<empty>"：账号服务数据库地址
 - `ACCOUNT_DATASOURCE_USERNAME`：**root**：账号服务数据库用户名
 - `ACCOUNT_DATASOURCE_PASSWORD`：**root**：账号服务数据库密码
-- `HOSPITAL_DATASOURCE_URL`："<empty>"：医院服务数据库地址
-- `HOSPITAL_DATASOURCE_USERNAME`：**root**：医院服务数据库用户名
-- `HOSPITAL_DATASOURCE_PASSWORD`：**root**：医院服务数据库密码
 - `ALIYUN_ACCESS_KEY`："<empty>"：阿里云账号 ID
 - `ALIYUN_ACCESS_SECRET`："<empty>"：阿里云账号密钥
+- `MAIL_FROM`："<empty>"：邮件地址，在阿里云配置
+- `MAIL_FROM_NAME`："<empty>"：邮件发件名，在阿里云配置
 
 ### 在开发环境中运行本应用
 

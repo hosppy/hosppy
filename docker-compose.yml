@@ -30,6 +30,12 @@ services:
     networks:
       - internal_access
       - external_access
+  web-service:
+    build: web
+    image: hosppy/web
+    networks:
+      - internal_access
+      - external_access
   planck-service:
     build: planck
     image: hosppy/planck-svc
@@ -39,18 +45,10 @@ services:
       - SPRING_PROFILES_ACTIVE
       - SERVER_PORT
       - ACCOUNT_SERVICE_ENDPOINT
+      - WEB_SERVICE_ENDPOINT
     depends_on:
       - account-service
-    networks:
-      - internal_access
-      - external_access
-  web-service:
-    build: web
-    image: hosppy/web
-    ports:
-      - "80:80"
-    depends_on:
-      - planck-service
+      - web-service
     networks:
       - internal_access
       - external_access
