@@ -16,7 +16,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/v1/accounts")
+@RequestMapping("/accounts")
 public class AccountController {
 
     private static final ILogger logger = SLoggerFactory.getLogger(AccountController.class);

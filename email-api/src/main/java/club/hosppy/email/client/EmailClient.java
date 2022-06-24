@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.Valid;
 
-@FeignClient(name = EmailConstant.SERVICE_NAME, path = "/v1/email", url = "${hosppy.email-service-endpoint}")
+@FeignClient(name = EmailConstant.SERVICE_NAME, path = "/email", url = "${hosppy.email-service-endpoint}")
 public interface EmailClient {
 
     @PostMapping("/send")

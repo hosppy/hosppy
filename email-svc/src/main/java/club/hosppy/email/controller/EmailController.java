@@ -12,7 +12,7 @@ import javax.validation.Valid;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/v1/email")
+@RequestMapping("/email")
 public class EmailController {
 
     private final EmailService emailService;

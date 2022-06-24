@@ -1,13 +1,7 @@
-FROM node:16-alpine AS builder
-
-WORKDIR /web
-
-COPY . .
-
-RUN npm i && npm run build
-
 FROM nginx:alpine
 
-COPY --from=builder /web/dist /usr/share/nginx/html
+COPY ./dist /usr/share/nginx/html
+
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80

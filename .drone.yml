@@ -7,13 +7,19 @@ platform:
   arch: amd64
 
 steps:
-  - name: build
+  - name: backend
     image: maven:3-jdk-11
     volumes:
       - name: cache
         path: /root/.m2
     commands:
       - mvn clean package
+
+  - name: frontend
+    image: node:16-alpine
+    commands:
+      - cd web
+      - npm i && npm run build
 
   - name: push
     image: hosppy/docker:alpine
