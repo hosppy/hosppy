@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>club.hosppy</groupId>
@@ -14,7 +12,6 @@
         <module>common-lib</module>
         <module>account-svc</module>
         <module>account-api</module>
-        <module>edison</module>
         <module>email-api</module>
         <module>email-svc</module>
         <module>planck</module>
@@ -57,6 +54,16 @@
             <dependency>
                 <groupId>club.hosppy</groupId>
                 <artifactId>common-lib</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>club.hosppy</groupId>
+                <artifactId>account-api</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>club.hosppy</groupId>
+                <artifactId>email-api</artifactId>
                 <version>1.0.0-SNAPSHOT</version>
             </dependency>
         </dependencies>
