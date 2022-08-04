@@ -7,7 +7,9 @@ import lombok.Data;
 @Builder
 public class BaseResponse {
 
-    private ResultCode code;
+    private int code;
+
+    private String status;
 
     private String message;
 }

@@ -1,9 +1,6 @@
 package club.hosppy.account.controller;
 
-import club.hosppy.account.dto.AccountDto;
-import club.hosppy.account.dto.CreateAccountRequest;
-import club.hosppy.account.dto.EmailConfirmation;
-import club.hosppy.account.dto.UpdatePasswordRequest;
+import club.hosppy.account.dto.*;
 import club.hosppy.account.service.AccountService;
 import com.github.structlog4j.ILogger;
 import com.github.structlog4j.SLoggerFactory;
@@ -47,5 +44,15 @@ public class AccountController {
     @PostMapping("/email")
     public void changeEmail(EmailConfirmation request) {
         accountService.changeEmailAndActivateAccount(request.getEmail(), request.getUserId());
+    }
+
+    @GetMapping("/activate/{token}")
+    public void verifyActivateToken(@PathVariable String token) {
+        accountService.verifyActivateToken(token);
+    }
+
+    @PostMapping("/activate/{token}")
+    public void activateAccount(@PathVariable String token, @RequestBody @Valid ActivateAccountRequest request) {
+        accountService.activateAccount(token, request.getPassword());
     }
 }

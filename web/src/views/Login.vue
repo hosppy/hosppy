@@ -1,4 +1,4 @@
-<script setup></script>
+<script setup lang="ts"></script>
 
 <template>
   <div
@@ -25,7 +25,7 @@
               name="email"
               type="email"
               autocomplete="email"
-              required=""
+              required
               class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
               placeholder="邮箱"
             />
@@ -37,7 +37,8 @@
               name="password"
               type="password"
               autocomplete="current-password"
-              required=""
+              maxlength="16"
+              required
               class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
               placeholder="密码"
             />

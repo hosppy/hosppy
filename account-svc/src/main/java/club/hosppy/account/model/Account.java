@@ -3,6 +3,7 @@ package club.hosppy.account.model;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -37,6 +38,10 @@ public class Account {
     private String photoUrl;
 
     private boolean support;
+
+    public boolean hasEmail() {
+        return StringUtils.hasText(email);
+    }
 
     @Override
     public boolean equals(Object o) {

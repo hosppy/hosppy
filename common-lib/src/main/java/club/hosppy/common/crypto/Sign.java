@@ -8,9 +8,6 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import org.apache.commons.lang3.StringUtils;
 
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -19,13 +16,15 @@ public class Sign {
     public static final String CLAIM_EMAIL = "email";
     public static final String CLAIM_USER_ID = "userId";
 
-    // a day
+    /**
+     * a day
+     */
     public static final long DURATION_MILLIS = 1000 * 60 * 60 * 24;
 
     private static Algorithm algorithm;
 
-    public static String generateEmailConfirmationToken(String userId, String email, String signingToken) {
-        Algorithm algorithm = Algorithm.HMAC512(signingToken);
+    public static String generateEmailConfirmationToken(String userId, String email, String secret) {
+        instanceAlgorithm(secret);
         return JWT.create()
                 .withClaim(CLAIM_EMAIL, email)
                 .withClaim(CLAIM_USER_ID, userId)
@@ -35,11 +34,9 @@ public class Sign {
 
     public static String generateSessionToken(String userId, String secret) {
         if (StringUtils.isEmpty(secret)) {
-            throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, "No signing token present");
+            throw new ServiceException(ResultCode.NO_SIGNING_TOKEN);
         }
-        if (algorithm == null) {
-            algorithm = Algorithm.HMAC512(secret);
-        }
+        instanceAlgorithm(secret);
         return JWT.create()
                 .withClaim(CLAIM_USER_ID, userId)
                 .withExpiresAt(new Date(System.currentTimeMillis() + DURATION_MILLIS))
@@ -47,10 +44,14 @@ public class Sign {
     }
 
     public static DecodedJWT verify(String token, String secret) {
+        instanceAlgorithm(secret);
+        JWTVerifier verifier = JWT.require(algorithm).build();
+        return verifier.verify(token);
+    }
+
+    private static void instanceAlgorithm(String secret) {
         if (algorithm == null) {
             algorithm = Algorithm.HMAC512(secret);
         }
-        JWTVerifier verifier = JWT.require(algorithm).build();
-        return verifier.verify(token);
     }
 }

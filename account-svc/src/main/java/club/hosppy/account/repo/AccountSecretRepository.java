@@ -12,6 +12,8 @@ public interface AccountSecretRepository extends JpaRepository<AccountSecret, St
 
     AccountSecret findAccountSecretByEmail(String email);
 
+    AccountSecret findAccountSecretById(String id);
+
     @Modifying(clearAutomatically = true)
     @Query("UPDATE AccountSecret account SET account.passwordHash = :passwordHash WHERE account.id = :id")
     @Transactional

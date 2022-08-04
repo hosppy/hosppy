@@ -1,31 +1,39 @@
 package club.hosppy.common.api;
 
-import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import javax.servlet.http.HttpServletResponse;
 
+@Getter
 @AllArgsConstructor
 public enum ResultCode {
 
-    BAD_AUTHENTICATION(HttpServletResponse.SC_BAD_REQUEST, "Bad Authentication"),
+    USER_ALREADY_ACTIVATED(HttpServletResponse.SC_BAD_REQUEST, "Activated", "The user already activated"),
 
-    BAD_REQUEST(HttpServletResponse.SC_BAD_REQUEST, "Bad Request"),
+    USER_UNREGISTERED(HttpServletResponse.SC_BAD_REQUEST, "NotRegistered", "The user not registered"),
 
-    NOT_FOUND(HttpServletResponse.SC_NOT_FOUND, "404 Not Found"),
+    USER_NOT_FOUND(HttpServletResponse.SC_NOT_FOUND, "NotFound", "User with specified id is not found"),
 
-    INTERNAL_SERVER_ERROR(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal Server Error");
+    INVALID_TOKEN(HttpServletResponse.SC_BAD_REQUEST, "InvalidToken", "Invalid token"),
 
-    @JsonValue
-    final int value;
+    NO_SIGNING_TOKEN(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "NoSigningToken", "No signing token present"),
+
+    UNABLE_SEND_EMAIL(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "UnableSendEmail", "Unable to send email"),
+
+    UNABLE_CREATE_TOKEN(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "UnableCreateToken", "Could not create token"),
+
+    UNABLE_CREATE_ACCOUNT(HttpServletResponse.SC_BAD_REQUEST, "UnableCreateAccount", "Could not create account"),
+
+    BAD_REQUEST(HttpServletResponse.SC_BAD_REQUEST, "IllegalArgument", "Bad Request"),
+
+    NOT_FOUND(HttpServletResponse.SC_NOT_FOUND, "NotFound", "404 Not Found"),
+
+    INTERNAL_SERVER_ERROR(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "InternalServerError", "Internal Server Error");
+
+    final int code;
+
+    final String status;
 
     final String message;
-
-    public int value() {
-        return this.value;
-    }
-
-    public String message() {
-        return this.message;
-    }
 }

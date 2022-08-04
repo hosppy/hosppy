@@ -1,6 +1,6 @@
-<script setup>
-import { ref } from '@vue/reactivity'
-import { createAccount } from '@/api/account'
+<script setup lang="ts">
+import { ref } from 'vue'
+import { create } from '@/api/account'
 
 const email = ref('')
 const errMsg = ref('')
@@ -10,7 +10,7 @@ const disabled = ref(false)
 const handleSubmit = () => {
   errMsg.value = ''
   disabled.value = true
-  createAccount(email.value)
+  create(email.value)
     .then(() => {
       registered.value = true
       disabled.value = false
@@ -53,7 +53,7 @@ const handleSubmit = () => {
               v-model="email"
               type="email"
               autocomplete="email"
-              required=""
+              required
               class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
               placeholder="邮箱"
             />

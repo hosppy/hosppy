@@ -9,25 +9,11 @@ public class ServiceException extends RuntimeException {
     private final ResultCode resultCode;
 
     public ServiceException(ResultCode resultCode) {
-        this(resultCode, resultCode.message());
-    }
-
-    public ServiceException(String message) {
-        this(ResultCode.BAD_REQUEST, message);
-    }
-
-    public ServiceException(ResultCode resultCode, String message) {
-        super(message);
         this.resultCode = resultCode;
     }
 
-    public ServiceException(String message, Throwable cause) {
-        super(message, cause);
-        this.resultCode = ResultCode.BAD_REQUEST;
-    }
-
-    public ServiceException(ResultCode resultCode, String message, Throwable cause) {
-        super(message, cause);
+    public ServiceException(ResultCode resultCode, Throwable cause) {
+        super(cause);
         this.resultCode = resultCode;
     }
 }

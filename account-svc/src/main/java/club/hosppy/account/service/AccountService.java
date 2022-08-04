@@ -1,15 +1,18 @@
 package club.hosppy.account.service;
 
-import club.hosppy.account.AccountConstant;
 import club.hosppy.account.dto.AccountDto;
 import club.hosppy.account.model.Account;
+import club.hosppy.account.model.AccountSecret;
 import club.hosppy.account.repo.AccountRepository;
 import club.hosppy.account.repo.AccountSecretRepository;
 import club.hosppy.common.api.ResultCode;
 import club.hosppy.common.crypto.Sign;
 import club.hosppy.common.error.ServiceException;
+import club.hosppy.email.EmailTmpl;
 import club.hosppy.email.client.EmailClient;
 import club.hosppy.email.dto.EmailRequest;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,7 +21,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
+import org.springframework.ui.ModelMap;
 
 import javax.persistence.EntityManager;
 import java.time.Instant;
@@ -47,7 +50,7 @@ public class AccountService {
     public AccountDto get(String userId) {
         Account account = accountRepository.findAccountById(userId);
         if (account == null) {
-            throw new ServiceException(ResultCode.NOT_FOUND, String.format("User with %s not found", userId));
+            throw new ServiceException(ResultCode.USER_NOT_FOUND);
         }
         return this.convertToDto(account);
     }
@@ -59,13 +62,7 @@ public class AccountService {
     }
 
     public AccountDto create(String name, String email, String phoneNumber) {
-        if (StringUtils.hasText(email)) {
-            Account foundAccount = accountRepository.findAccountByEmail(email);
-            if (foundAccount != null) {
-                throw new ServiceException("A user with that email already exists. Try a password reset");
-            }
-        }
-
+        String emailName = name == null ? "there" : name;
         Account account = Account.builder()
                 .name(name == null ? email : name)
                 .phoneNumber(phoneNumber)
@@ -74,16 +71,21 @@ public class AccountService {
                 .memberSince(Instant.now())
                 .build();
 
+        if (account.hasEmail()) {
+            Account foundAccount = accountRepository.findAccountByEmail(email);
+            if (foundAccount != null) {
+                this.sendActivateEmail(foundAccount.getId(), email, emailName);
+                return this.convertToDto(foundAccount);
+            }
+        }
+
         try {
             accountRepository.save(account);
         } catch (Exception e) {
-            String errMsg = "Could not create account";
-            throw new ServiceException(errMsg, e);
+            throw new ServiceException(ResultCode.UNABLE_CREATE_ACCOUNT, e);
         }
 
-        if (StringUtils.hasText(email)) {
-            String emailName = name == null ? "there" : name;
-
+        if (account.hasEmail()) {
             this.sendActivateEmail(account.getId(), email, emailName);
         }
 
@@ -95,11 +97,11 @@ public class AccountService {
 
         Account existingAccount = accountRepository.findAccountById(newAccount.getId());
         if (existingAccount == null) {
-            throw new ServiceException(ResultCode.NOT_FOUND, String.format("User with id %s not found", newAccount.getId()));
+            throw new ServiceException(ResultCode.USER_NOT_FOUND);
         }
         entityManager.detach(existingAccount);
 
-        // TODO unfinished
+        // TODO update account
 
         return this.convertToDto(newAccount);
     }
@@ -109,7 +111,7 @@ public class AccountService {
 
         int affected = accountSecretRepository.updatePasswordHashById(pwdHash, userId);
         if (affected != 1) {
-            throw new ServiceException(ResultCode.NOT_FOUND, "User with specified id not found");
+            throw new ServiceException(ResultCode.USER_NOT_FOUND);
         }
     }
 
@@ -119,19 +121,21 @@ public class AccountService {
 
         String link = webDomain + "/activate/" + token;
 
-        String htmlBody = String.format(AccountConstant.ACTIVATE_ACCOUNT_TMPL, name, link, link, link);
-
+        ModelMap model = new ModelMap();
+        model.addAttribute("name", name);
+        model.addAttribute("link", link);
         EmailRequest emailRequest = EmailRequest.builder()
                 .to(email)
                 .name(name)
                 .subject(subject)
-                .htmlBody(htmlBody)
+                .tmpl(EmailTmpl.ACTIVATE_ACCOUNT)
+                .params(model)
                 .build();
 
         try {
             emailClient.send(emailRequest);
         } catch (Exception e) {
-            throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, "Unable to send email", e);
+            throw new ServiceException(ResultCode.UNABLE_SEND_EMAIL, e);
         }
     }
 
@@ -144,14 +148,53 @@ public class AccountService {
             // TODO config signing secret
             return Sign.generateEmailConfirmationToken(userId, email, "signing");
         } catch (Exception e) {
-            throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, "Could not create token", e);
+            throw new ServiceException(ResultCode.UNABLE_CREATE_TOKEN, e);
         }
     }
 
     public void changeEmailAndActivateAccount(String email, String userId) {
         int affected = accountRepository.updateEmailAndActivateById(email, userId);
         if (affected != 1) {
-            throw new ServiceException(ResultCode.NOT_FOUND, "User with specified id is not found");
+            throw new ServiceException(ResultCode.USER_NOT_FOUND);
+        }
+    }
+
+    public void activateAccount(String token, String password) {
+        DecodedJWT jwt = decodeActivateToken(token);
+        String email = jwt.getClaim(Sign.CLAIM_EMAIL).as(String.class);
+        String userId = jwt.getClaim(Sign.CLAIM_USER_ID).as(String.class);
+        Account foundAccount = accountRepository.findAccountById(userId);
+        if (foundAccount == null) {
+            throw new ServiceException(ResultCode.USER_UNREGISTERED);
+        }
+
+        if (foundAccount.isConfirmedAndActive()) {
+            throw new ServiceException(ResultCode.USER_ALREADY_ACTIVATED);
+        }
+
+        foundAccount.setEmail(email);
+        foundAccount.setConfirmedAndActive(true);
+        accountRepository.save(foundAccount);
+
+        AccountSecret foundAccountSecret = accountSecretRepository.findAccountSecretById(userId);
+        foundAccountSecret.setPasswordHash(passwordEncoder.encode(password));
+        accountSecretRepository.save(foundAccountSecret);
+    }
+
+    public void verifyActivateToken(String token) {
+        DecodedJWT jwt = decodeActivateToken(token);
+        String userId = jwt.getClaim(Sign.CLAIM_USER_ID).as(String.class);
+        Account foundAccount = accountRepository.findAccountById(userId);
+        if (foundAccount != null && foundAccount.isConfirmedAndActive()) {
+            throw new ServiceException(ResultCode.USER_ALREADY_ACTIVATED);
+        }
+    }
+
+    public DecodedJWT decodeActivateToken(String token) {
+        try {
+            return Sign.verify(token, "signing");
+        } catch (JWTVerificationException e) {
+            throw new ServiceException(ResultCode.INVALID_TOKEN);
         }
     }
 
