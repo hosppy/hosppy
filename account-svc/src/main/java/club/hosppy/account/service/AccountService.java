@@ -1,6 +1,7 @@
 package club.hosppy.account.service;
 
 import club.hosppy.account.dto.AccountDto;
+import club.hosppy.account.event.AccountCreatedEvent;
 import club.hosppy.account.model.Account;
 import club.hosppy.account.model.AccountSecret;
 import club.hosppy.account.repo.AccountRepository;
@@ -8,28 +9,24 @@ import club.hosppy.account.repo.AccountSecretRepository;
 import club.hosppy.common.api.ResultCode;
 import club.hosppy.common.crypto.Sign;
 import club.hosppy.common.error.ServiceException;
-import club.hosppy.email.EmailTmpl;
-import club.hosppy.email.client.EmailClient;
-import club.hosppy.email.dto.EmailRequest;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.ModelMap;
 
 import javax.persistence.EntityManager;
 import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class AccountService {
 
     private final AccountRepository accountRepository;
@@ -38,14 +35,11 @@ public class AccountService {
 
     private final ModelMapper modelMapper;
 
-    private final EmailClient emailClient;
-
     private final EntityManager entityManager;
 
     private final PasswordEncoder passwordEncoder;
 
-    @Value("${hosppy.web-domain}")
-    private String webDomain;
+    private final ApplicationContext applicationContext;
 
     public AccountDto get(String userId) {
         Account account = accountRepository.findAccountById(userId);
@@ -62,19 +56,18 @@ public class AccountService {
     }
 
     public AccountDto create(String name, String email, String phoneNumber) {
-        String emailName = name == null ? "there" : name;
         Account account = Account.builder()
-                .name(name == null ? email : name)
-                .phoneNumber(phoneNumber)
-                .email(email)
-                .photoUrl("")
-                .memberSince(Instant.now())
-                .build();
+            .name(name == null ? email : name)
+            .phoneNumber(phoneNumber)
+            .email(email)
+            .photoUrl("")
+            .memberSince(Instant.now())
+            .build();
 
         if (account.hasEmail()) {
             Account foundAccount = accountRepository.findAccountByEmail(email);
             if (foundAccount != null) {
-                this.sendActivateEmail(foundAccount.getId(), email, emailName);
+                applicationContext.publishEvent(new AccountCreatedEvent(this, foundAccount));
                 return this.convertToDto(foundAccount);
             }
         }
@@ -86,7 +79,7 @@ public class AccountService {
         }
 
         if (account.hasEmail()) {
-            this.sendActivateEmail(account.getId(), email, emailName);
+            applicationContext.publishEvent(new AccountCreatedEvent(this, account));
         }
 
         return this.convertToDto(account);
@@ -102,7 +95,10 @@ public class AccountService {
         entityManager.detach(existingAccount);
 
         // TODO update account
-
+        existingAccount.setName(newAccount.getName());
+        existingAccount.setPhoneNumber(newAccount.getPhoneNumber());
+        existingAccount.setPhotoUrl(newAccount.getPhotoUrl());
+        accountRepository.save(existingAccount);
         return this.convertToDto(newAccount);
     }
 
@@ -110,32 +106,8 @@ public class AccountService {
         String pwdHash = passwordEncoder.encode(password);
 
         int affected = accountSecretRepository.updatePasswordHashById(pwdHash, userId);
-        if (affected != 1) {
+        if (affected == 0) {
             throw new ServiceException(ResultCode.USER_NOT_FOUND);
-        }
-    }
-
-    public void sendActivateEmail(String userId, String email, String name) {
-        String subject = "Activate your Hosppy account";
-        String token = createToken(userId, email);
-
-        String link = webDomain + "/activate/" + token;
-
-        ModelMap model = new ModelMap();
-        model.addAttribute("name", name);
-        model.addAttribute("link", link);
-        EmailRequest emailRequest = EmailRequest.builder()
-                .to(email)
-                .name(name)
-                .subject(subject)
-                .tmpl(EmailTmpl.ACTIVATE_ACCOUNT)
-                .params(model)
-                .build();
-
-        try {
-            emailClient.send(emailRequest);
-        } catch (Exception e) {
-            throw new ServiceException(ResultCode.UNABLE_SEND_EMAIL, e);
         }
     }
 
@@ -143,18 +115,9 @@ public class AccountService {
 
     }
 
-    private String createToken(String userId, String email) {
-        try {
-            // TODO config signing secret
-            return Sign.generateEmailConfirmationToken(userId, email, "signing");
-        } catch (Exception e) {
-            throw new ServiceException(ResultCode.UNABLE_CREATE_TOKEN, e);
-        }
-    }
-
     public void changeEmailAndActivateAccount(String email, String userId) {
         int affected = accountRepository.updateEmailAndActivateById(email, userId);
-        if (affected != 1) {
+        if (affected == 0) {
             throw new ServiceException(ResultCode.USER_NOT_FOUND);
         }
     }

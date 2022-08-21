@@ -31,10 +31,10 @@ public class AppConfig {
     @Bean
     public Client client() throws Exception {
         Config config = new Config()
-                .setAccessKeyId(aliyunAccessKey)
-                .setAccessKeySecret(aliyunAccessSecret)
-                .setRegionId(EmailConstant.ALIYUN_REGION_ID)
-                .setEndpoint(EmailConstant.ALIYUN_ENDPOINT);
+            .setAccessKeyId(aliyunAccessKey)
+            .setAccessKeySecret(aliyunAccessSecret)
+            .setRegionId(EmailConstant.ALIYUN_REGION_ID)
+            .setEndpoint(EmailConstant.ALIYUN_ENDPOINT);
         return new Client(config);
     }
 
