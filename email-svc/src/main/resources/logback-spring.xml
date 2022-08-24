@@ -18,7 +18,7 @@
     <appender name="FileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${log.path}</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>email.%d{yyyy-MM-dd-HH-mm}.log</fileNamePattern>
+            <fileNamePattern>/var/logs/hosppy/email.%d{yyyy-MM-dd-HH-mm}.log</fileNamePattern>
             <maxHistory>7</maxHistory>
             <totalSizeCap>100MB</totalSizeCap>
         </rollingPolicy>
