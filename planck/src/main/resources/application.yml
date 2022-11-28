@@ -1,7 +1,0 @@
-spring:
-  profiles:
-    active: dev
-  application:
-    name: planck-service
-hosppy:
-  signing-secret: ${SIGNING_SECRET}

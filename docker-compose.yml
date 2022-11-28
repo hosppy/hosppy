@@ -1,54 +1,19 @@
 version: '3.7'
 
 services:
-  account-service:
-    build: account-svc
-    image: hosppy/account-svc
+  web:
+    image: hosppy/svc
     environment:
       - SPRING_PROFILES_ACTIVE
       - SERVER_PORT
-      - ACCOUNT_DATASOURCE_URL
-      - ACCOUNT_DATASOURCE_USERNAME
-      - ACCOUNT_DATASOURCE_PASSWORD
-      - EMAIL_SERVICE_ENDPOINT
-      - WEB_DOMAIN
-    depends_on:
-      - email-service
-    networks:
-      - internal_access
-      - external_access
-  email-service:
-    build: email-svc
-    image: hosppy/email-svc
-    environment:
-      - SPRING_PROFILES_ACTIVE
-      - SERVER_PORT
+      - DB_URL
+      - DB_USERNAME
+      - DB_PASSWORD
       - ALIYUN_ACCESS_KEY
       - ALIYUN_ACCESS_SECRET
       - MAIL_FROM
       - MAIL_FROM_NAME
-    networks:
-      - internal_access
-      - external_access
-  web-service:
-    build: web
-    image: hosppy/web
-    networks:
-      - internal_access
-      - external_access
-  planck-service:
-    build: planck
-    image: hosppy/planck-svc
-    ports:
-      - "80:80"
-    environment:
-      - SPRING_PROFILES_ACTIVE
-      - SERVER_PORT
-      - ACCOUNT_SERVICE_ENDPOINT
-      - WEB_SERVICE_ENDPOINT
-    depends_on:
-      - account-service
-      - web-service
+      - WEB_DOMAIN
     networks:
       - internal_access
       - external_access

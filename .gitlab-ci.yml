@@ -1,0 +1,21 @@
+cache:
+  paths:
+    - .m2/repository
+    - target
+
+stages:
+  - build
+
+build:
+  variables:
+    MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
+  stage: build
+  image: maven:3-jdk-11
+  script:
+    - mvn clean package
+
+docker:
+  stage: build
+  image: hosppy/docker:alpine
+  script:
+    - docker build -t hosppy/svc .

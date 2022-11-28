@@ -1,0 +1,8 @@
+server:
+  port: 8080
+spring:
+  jpa:
+    show-sql: true
+
+hosppy:
+  web-domain: ${WEB_DOMAIN:http://localhost:4000}
