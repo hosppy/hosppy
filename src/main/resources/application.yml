@@ -5,6 +5,11 @@ spring:
     url: ${DB_URL}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
+  flyway:
+    enabled: true
+    clean-disabled: true
+    validate-on-migrate: true
+    baseline-on-migrate: true
   jpa:
     hibernate:
       ddl-auto: validate

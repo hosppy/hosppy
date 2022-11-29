@@ -1,25 +1,23 @@
 package club.hosppy.account.model
 
 import org.hibernate.Hibernate
-import org.hibernate.annotations.GenericGenerator
 import java.time.Instant
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
 import javax.persistence.Id
 
 @Entity
 class Account(
     @Id
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
-    @GeneratedValue(generator = "uuid")
-    var id: String? = null,
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Int? = null,
     var name: String = "",
     var email: String = "",
     var confirmedAndActive: Boolean = false,
-    var memberSince: Instant? = null,
+    var memberSince: Instant,
     var phoneNumber: String? = null,
-    var photoUrl: String? = null,
-    var support: Boolean = false
+    var avatarUrl: String? = null,
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

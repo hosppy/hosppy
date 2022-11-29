@@ -35,8 +35,8 @@ class AccountService(
     private val emailService: EmailService,
     @Value("\${hosppy.web-domain}") private val webDomain: String
 ) {
-    operator fun get(userId: String?): AccountDto {
-        val account = accountRepository.findAccountById(userId)
+    operator fun get(email: String?): AccountDto {
+        val account = accountRepository.findAccountByEmail(email)
             ?: throw ServiceException(ResultCode.USER_NOT_FOUND)
         return convertToDto(account)
     }
@@ -52,7 +52,7 @@ class AccountService(
             name = name ?: "",
             phoneNumber = phoneNumber,
             email = email,
-            photoUrl = "",
+            avatarUrl = "",
             memberSince = Instant.now()
         )
         if (email.isNotBlank()) {
@@ -75,7 +75,7 @@ class AccountService(
 
     fun sendActivateEmail(account: Account) {
         val subject = "Activate your Hosppy account"
-        val token = createToken(account.id!!, account.email)
+        val token = createToken(account.id, account.email)
         val link = "$webDomain/activate/$token"
         val model = ModelMap()
         model.addAttribute("name", account.name)
@@ -94,7 +94,7 @@ class AccountService(
         }
     }
 
-    private fun createToken(userId: String, email: String): String? {
+    private fun createToken(userId: Int?, email: String): String? {
         return try {
             // TODO config signing secret
             Sign.generateEmailConfirmationToken(userId, email, "signing")
@@ -105,14 +105,14 @@ class AccountService(
 
     fun update(newAccountDto: AccountDto): AccountDto {
         val newAccount = convertToModel(newAccountDto)
-        val existingAccount = accountRepository.findAccountById(newAccount.id)
+        val existingAccount = accountRepository.findAccountByEmail(newAccount.email)
             ?: throw ServiceException(ResultCode.USER_NOT_FOUND)
         entityManager.detach(existingAccount)
 
         // TODO update account
         existingAccount.name = newAccount.name
         existingAccount.phoneNumber = newAccount.phoneNumber
-        existingAccount.photoUrl = newAccount.photoUrl
+        existingAccount.avatarUrl = newAccount.avatarUrl
         accountRepository.save(existingAccount)
         return convertToDto(newAccount)
     }
@@ -136,7 +136,7 @@ class AccountService(
     fun activateAccount(token: String?, password: String?) {
         val jwt = decodeActivateToken(token)
         val email = jwt.getClaim(Sign.CLAIM_EMAIL).`as`(String::class.java)
-        val userId = jwt.getClaim(Sign.CLAIM_USER_ID).`as`(String::class.java)
+        val userId = jwt.getClaim(Sign.CLAIM_USER_ID).`as`(Int::class.java)
         val foundAccount = accountRepository.findAccountById(userId)
             ?: throw ServiceException(ResultCode.USER_UNREGISTERED)
         if (foundAccount.confirmedAndActive) {
@@ -152,7 +152,7 @@ class AccountService(
 
     fun verifyActivateToken(token: String?) {
         val jwt = decodeActivateToken(token)
-        val userId = jwt.getClaim(Sign.CLAIM_USER_ID).`as`(String::class.java)
+        val userId = jwt.getClaim(Sign.CLAIM_USER_ID).`as`(Int::class.java)
         val foundAccount = accountRepository.findAccountById(userId)
         if (foundAccount != null && foundAccount.confirmedAndActive) {
             throw ServiceException(ResultCode.USER_ALREADY_ACTIVATED)

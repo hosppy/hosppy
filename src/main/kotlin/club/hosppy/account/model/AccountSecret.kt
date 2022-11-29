@@ -14,7 +14,7 @@ import javax.persistence.Table
 @Table(name = "account")
 class AccountSecret {
     @Id
-    var id: String? = null
+    var id: Int? = null
     var passwordHash: String? = null
     var email: String? = null
     var confirmedAndActive = false

@@ -20,7 +20,7 @@ object Sign {
     private var algorithm: Algorithm? = null
 
     @JvmStatic
-    fun generateEmailConfirmationToken(userId: String?, email: String?, secret: String): String {
+    fun generateEmailConfirmationToken(userId: Int?, email: String, secret: String): String {
         instanceAlgorithm(secret)
         return JWT.create()
             .withClaim(CLAIM_EMAIL, email)

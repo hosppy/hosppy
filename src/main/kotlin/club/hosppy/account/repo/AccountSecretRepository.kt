@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional
 @Repository
 interface AccountSecretRepository : JpaRepository<AccountSecret?, String?> {
     fun findAccountSecretByEmail(email: String?): AccountSecret?
-    fun findAccountSecretById(id: String?): AccountSecret?
+    fun findAccountSecretById(id: Int?): AccountSecret?
 
     @Modifying(clearAutomatically = true)
     @Query("UPDATE AccountSecret account SET account.passwordHash = :passwordHash WHERE account.id = :id")

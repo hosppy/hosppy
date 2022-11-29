@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @Repository
 interface AccountRepository : JpaRepository<Account?, String?> {
-    fun findAccountById(id: String?): Account?
+    fun findAccountById(id: Int?): Account?
     fun findAccountByEmail(email: String?): Account?
     fun findAccountByPhoneNumber(phoneNumber: String?): Account?
 
