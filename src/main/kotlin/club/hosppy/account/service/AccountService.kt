@@ -35,7 +35,7 @@ class AccountService(
     private val emailService: EmailService,
     @Value("\${hosppy.web-domain}") private val webDomain: String
 ) {
-    operator fun get(email: String?): AccountDto {
+    fun getByEmail(email: String?): AccountDto {
         val account = accountRepository.findAccountByEmail(email)
             ?: throw ServiceException(ResultCode.USER_NOT_FOUND)
         return convertToDto(account)

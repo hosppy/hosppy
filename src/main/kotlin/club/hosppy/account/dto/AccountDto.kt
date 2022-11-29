@@ -21,9 +21,8 @@ class AccountDto {
     val email: @Email(message = "Invalid email") String? = null
     val confirmedAndActive = false
     val memberSince: @NotNull Instant? = null
-    val support = false
 
     @PhoneNumber
     val phoneNumber: String? = null
-    val photoUrl: @NotEmpty String? = null
+    val avatarUrl: @NotEmpty String? = null
 }

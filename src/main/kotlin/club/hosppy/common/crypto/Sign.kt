@@ -19,7 +19,6 @@ object Sign {
     private const val DURATION_MILLIS = (1000 * 60 * 60 * 24).toLong()
     private var algorithm: Algorithm? = null
 
-    @JvmStatic
     fun generateEmailConfirmationToken(userId: Int?, email: String, secret: String): String {
         instanceAlgorithm(secret)
         return JWT.create()

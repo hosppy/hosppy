@@ -1,6 +1,5 @@
 package club.hosppy.email.service
 
-import club.hosppy.email.config.AppConfig
 import club.hosppy.email.config.MailConfig
 import club.hosppy.email.dto.EmailRequest
 import com.aliyun.dm20151123.Client
@@ -26,7 +25,7 @@ class EmailService(
     private val tmplCache: MutableMap<String, Template?> = HashMap(8)
 ) {
 
-    @Async(AppConfig.ASYNC_EXECUTOR_NAME)
+    @Async(MailConfig.ASYNC_EXECUTOR_NAME)
     fun sendAsync(request: EmailRequest) {
         val htmlBody: String
         try {

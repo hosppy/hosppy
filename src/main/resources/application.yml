@@ -14,6 +14,12 @@ spring:
     hibernate:
       ddl-auto: validate
     open-in-view: false
+  session:
+    store-type: redis
+  redis:
+    host: ${REDIS_HOST}
+    password: ${REDIS_PASSWORD}
+    port: ${REDIS_PORT}
 
 hosppy:
   web-domain: ${WEB_DOMAIN}

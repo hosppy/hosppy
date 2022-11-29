@@ -23,9 +23,9 @@ class AccountController(
         return accountService.list(offset, limit)
     }
 
-    @GetMapping("/{userId}")
-    fun getAccount(@PathVariable userId: String?): AccountDto? {
-        return accountService[userId]
+    @GetMapping("/{email}")
+    fun getAccount(@PathVariable email: String?): AccountDto? {
+        return accountService.getByEmail(email)
     }
 
     @PostMapping
