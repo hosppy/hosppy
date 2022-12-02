@@ -1,18 +1,19 @@
 cache:
   paths:
-    - .m2/repository
-    - target
+    - .gradle
+    - build
 
 stages:
   - build
 
 build:
   variables:
-    MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
+    GRADLE_OPTS: "-Dorg.gradle.daemon=false"
   stage: build
-  image: maven:3-jdk-11
+  image: gradle:7.5.1-jdk11-alpine
   script:
-    - mvn clean package
+    - export GRADLE_USER_HOME="$(pwd)/.gradle"
+    - gradle clean bootJar --build-cache
 
 docker:
   stage: build
