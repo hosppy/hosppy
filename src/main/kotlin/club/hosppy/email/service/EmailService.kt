@@ -10,13 +10,11 @@ import com.github.structlog4j.SLoggerFactory
 import freemarker.template.Configuration
 import freemarker.template.Template
 import freemarker.template.TemplateException
-import lombok.RequiredArgsConstructor
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Service
 import java.io.IOException
 import java.io.StringWriter
 
-@RequiredArgsConstructor
 @Service
 class EmailService(
     private val client: Client,

@@ -22,7 +22,6 @@ class AccountDto {
     val confirmedAndActive = false
     val memberSince: @NotNull Instant? = null
 
-    @PhoneNumber
-    val phoneNumber: String? = null
+    val phoneNumber: @PhoneNumber String? = null
     val avatarUrl: @NotEmpty String? = null
 }
