@@ -15,4 +15,4 @@ FROM node:16-alpine
 COPY --from=builder /app/build /app
 COPY --from=builder /app/package.json /app
 
-ENTRYPOINT ["node", "/app"]
+ENTRYPOINT ["node", "/app/build"]
