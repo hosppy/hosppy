@@ -9,25 +9,38 @@ stages:
 backend_gradle_build:
   variables:
     GRADLE_OPTS: "-Dorg.gradle.daemon=false"
-    RULES_CHANGES_PATH: "src/**/*"
   stage: build
+  only:
+    changes:
+      - "src/**/*"
   image: gradle:7.5.1-jdk11-alpine
   script:
     - export GRADLE_USER_HOME="$(pwd)/.gradle"
     - gradle clean bootJar --build-cache
 
 backend_docker_build:
-  variables:
-    RULES_CHANGES_PATH: "src/**/*"
   stage: build
+  only:
+    changes:
+      - "src/**/*"
+  dependencies:
+    - backend_gradle_build
   image: hosppy/docker:alpine
   script:
     - docker build -t hosppy/svc .
 
 frontend_build:
-  variables:
-    RULES_CHANGES_PATH: "app/**/*"
   stage: build
+  only:
+    changes:
+      - "app/**/*"
+  except:
+    changes:
+      - "*.md"
+      - ".editorconfig"
+      - ".npmrc"
+      - ".prettierignore"
+      - ".prettierrc"
   image: hosppy/docker:alpine
   script:
     - cd app
