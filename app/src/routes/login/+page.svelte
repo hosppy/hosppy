@@ -45,9 +45,7 @@
         </div>
 
         <div class="text-sm">
-          <a href="/forget-password" class="font-medium text-indigo-600 hover:text-indigo-500">
-            忘记密码?
-          </a>
+          <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500"> 忘记密码? </a>
         </div>
       </div>
 

@@ -1,0 +1,5 @@
+*.md
+.prettierrc
+.svelte-kit/
+build/
+node_modules/
