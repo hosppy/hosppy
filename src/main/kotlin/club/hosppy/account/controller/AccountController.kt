@@ -3,12 +3,10 @@ package club.hosppy.account.controller
 import club.hosppy.account.dto.*
 import club.hosppy.account.service.AccountService
 import com.github.structlog4j.SLoggerFactory
-import lombok.RequiredArgsConstructor
 import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
 import javax.validation.constraints.Min
 
-@RequiredArgsConstructor
 @RestController
 @RequestMapping("/accounts")
 class AccountController(

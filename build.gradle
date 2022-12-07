@@ -34,7 +34,6 @@ dependencies {
     implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
     implementation 'org.flywaydb:flyway-core'
     implementation 'org.apache.commons:commons-lang3'
-    implementation 'org.projectlombok:lombok'
     implementation 'structlog4j:structlog4j-json:1.0.0'
     implementation 'org.modelmapper:modelmapper:3.1.0'
     implementation 'com.auth0:java-jwt:4.2.1'

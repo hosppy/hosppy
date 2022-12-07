@@ -12,7 +12,6 @@ import club.hosppy.email.dto.EmailRequest
 import club.hosppy.email.service.EmailService
 import com.auth0.jwt.exceptions.JWTVerificationException
 import com.auth0.jwt.interfaces.DecodedJWT
-import lombok.RequiredArgsConstructor
 import org.modelmapper.ModelMapper
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.domain.PageRequest
@@ -25,7 +24,6 @@ import javax.persistence.EntityManager
 import kotlin.streams.asSequence
 
 @Service
-@RequiredArgsConstructor
 class AccountService(
     private val accountRepository: AccountRepository,
     private val accountSecretRepository: AccountSecretRepository,

@@ -1,11 +1,7 @@
 package club.hosppy.common.api
 
-import lombok.AllArgsConstructor
-import lombok.Getter
 import javax.servlet.http.HttpServletResponse
 
-@Getter
-@AllArgsConstructor
 enum class ResultCode(
     val code: Int = 0,
     val status: String? = null,
