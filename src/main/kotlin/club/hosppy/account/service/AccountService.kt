@@ -19,7 +19,6 @@ import org.springframework.data.domain.Pageable
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.ui.ModelMap
-import java.time.Instant
 import javax.persistence.EntityManager
 import kotlin.streams.asSequence
 
@@ -39,20 +38,17 @@ class AccountService(
         return convertToDto(account)
     }
 
-    fun list(offset: Int, limit: Int): List<AccountDto> {
-        val pageRequest: Pageable = PageRequest.of(offset, limit)
+    fun list(page: Int, size: Int): List<AccountDto> {
+        val pageRequest: Pageable = PageRequest.of(page, size)
         val accountPage = accountRepository.findAll(pageRequest)
         return accountPage.stream().asSequence().map(this::convertToDto).toList()
     }
 
     fun create(name: String?, email: String, phoneNumber: String?): AccountDto {
-        val account = Account(
-            name = name ?: "",
-            phoneNumber = phoneNumber,
-            email = email,
-            avatarUrl = "",
-            memberSince = Instant.now()
-        )
+        val account = Account().apply {
+            this.name = name ?: ""
+            this.email = email
+        }
         if (email.isNotBlank()) {
             val foundAccount = accountRepository.findAccountByEmail(email)
             if (foundAccount != null) {

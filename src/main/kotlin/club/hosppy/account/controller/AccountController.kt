@@ -15,10 +15,10 @@ class AccountController(
 
     @GetMapping
     fun listAccounts(
-        @RequestParam(defaultValue = "0") offset: @Min(0) Int,
-        @RequestParam(defaultValue = "10") limit: @Min(0) Int
+        @RequestParam(defaultValue = "0") page: @Min(0) Int,
+        @RequestParam(defaultValue = "10") size: @Min(0) Int
     ): List<AccountDto?>? {
-        return accountService.list(offset, limit)
+        return accountService.list(page, size)
     }
 
     @GetMapping("/{email}")

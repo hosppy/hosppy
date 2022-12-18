@@ -20,6 +20,7 @@ build/
 ### IntelliJ IDEA ###
 .idea
 .run
+.jpb
 *.iws
 *.iml
 *.ipr
