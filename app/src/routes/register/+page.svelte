@@ -1,5 +1,15 @@
 <script>
+  import fetch from '$lib/utils/fetch';
+
   let registered = false;
+  let email = '';
+
+  function handleSubmit() {
+    fetch('/accounts', {
+      method: 'POST',
+      body: JSON.stringify({ email })
+    });
+  }
 </script>
 
 <div class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -23,11 +33,12 @@
         </div>
       </div>
     {:else}
-      <form class="mt-8 space-y-6">
+      <form on:submit|preventDefault={handleSubmit} class="mt-8 space-y-6" o>
         <div class="rounded-md shadow-sm -space-y-px">
           <div>
             <label for="email-address" class="sr-only">邮箱地址</label>
             <input
+              bind:value={email}
               type="email"
               autocomplete="email"
               required

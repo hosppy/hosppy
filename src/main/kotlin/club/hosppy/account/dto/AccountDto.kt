@@ -8,12 +8,12 @@ import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.NotNull
 
 class AccountDto {
-    val id: @NotBlank String? = null
-    val name: String? = null
-    val email: @Email(message = "Invalid email") String? = null
-    val confirmedAndActive = false
-    val memberSince: @NotNull Instant? = null
+    var id: @NotBlank Int? = null
+    var name: String? = null
+    var email: @Email(message = "Invalid email") String? = null
+    var confirmedAndActive = false
+    var memberSince: @NotNull Instant? = null
 
-    val phoneNumber: @PhoneNumber String? = null
-    val avatarUrl: @NotEmpty String? = null
+    var phoneNumber: @PhoneNumber String? = null
+    var avatarUrl: @NotEmpty String? = null
 }

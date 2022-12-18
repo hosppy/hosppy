@@ -161,11 +161,7 @@ class AccountService(
         }
     }
 
-    private fun convertToDto(account: Account?): AccountDto {
-        return modelMapper.map(account, AccountDto::class.java)
-    }
+    private fun convertToDto(account: Account?): AccountDto = modelMapper.map(account, AccountDto::class.java)
 
-    private fun convertToModel(accountDto: AccountDto): Account {
-        return modelMapper.map(accountDto, Account::class.java)
-    }
+    private fun convertToModel(accountDto: AccountDto): Account = modelMapper.map(accountDto, Account::class.java)
 }
