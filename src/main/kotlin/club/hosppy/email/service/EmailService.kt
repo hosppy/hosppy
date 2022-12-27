@@ -8,19 +8,15 @@ import com.aliyun.teautil.models.RuntimeOptions
 import com.github.structlog4j.IToLog
 import com.github.structlog4j.SLoggerFactory
 import freemarker.template.Configuration
-import freemarker.template.Template
-import freemarker.template.TemplateException
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Service
-import java.io.IOException
 import java.io.StringWriter
 
 @Service
 class EmailService(
     private val client: Client,
     private val mailConfig: MailConfig,
-    private val config: Configuration,
-    private val tmplCache: MutableMap<String, Template?> = HashMap(8)
+    private val config: Configuration
 ) {
 
     @Async(MailConfig.ASYNC_EXECUTOR_NAME)
@@ -28,17 +24,11 @@ class EmailService(
         val htmlBody: String
         try {
             val tmplName = request.tmpl.name
-            var tmpl = tmplCache[tmplName]
-            if (tmpl == null) {
-                tmpl = config.getTemplate("$tmplName.ftl")
-                tmplCache[tmplName] = tmpl
-            }
+            val tmpl = config.getTemplate("$tmplName.ftl")
             val writer = StringWriter()
-            tmpl!!.process(request.params, writer)
+            tmpl.process(request.params, writer)
             htmlBody = writer.toString()
-        } catch (e: IOException) {
-            throw IllegalStateException(e)
-        } catch (e: TemplateException) {
+        } catch (e: Exception) {
             throw IllegalStateException(e)
         }
         val logContext = IToLog {
