@@ -1,11 +1,11 @@
 <script>
-  import fetch from '$lib/utils/fetch';
+  import request from '$lib/utils/request';
 
   let registered = false;
   let email = '';
 
   function handleSubmit() {
-    fetch('/accounts', {
+    request('/accounts', {
       method: 'POST',
       body: JSON.stringify({ email })
     });
