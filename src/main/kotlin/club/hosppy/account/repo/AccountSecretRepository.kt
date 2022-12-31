@@ -16,4 +16,9 @@ interface AccountSecretRepository : JpaRepository<AccountSecret?, String?> {
     @Query("UPDATE AccountSecret account SET account.passwordHash = :passwordHash WHERE account.id = :id")
     @Transactional
     fun updatePasswordHashById(passwordHash: String?, id: String?): Int
+
+    @Modifying(clearAutomatically = true)
+    @Query("UPDATE AccountSecret account SET account.passwordHash = :passwordHash WHERE account.email = :email")
+    @Transactional
+    fun updatePasswordHashByEmail(email: String)
 }

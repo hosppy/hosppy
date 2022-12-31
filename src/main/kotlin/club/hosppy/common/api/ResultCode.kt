@@ -3,14 +3,14 @@ package club.hosppy.common.api
 import javax.servlet.http.HttpServletResponse
 
 enum class ResultCode(
-    val code: Int = 0,
+    val code: Int = HttpServletResponse.SC_BAD_REQUEST,
     val status: String,
-    val message: String
+    val message: String,
 ) {
-    USER_ALREADY_ACTIVATED(
+    USER_ALREADY_EXISTS(
         HttpServletResponse.SC_BAD_REQUEST,
-        "Activated",
-        "The user already activated"
+        "UserExists",
+        "The user already exists"
     ),
     USER_UNREGISTERED(HttpServletResponse.SC_BAD_REQUEST, "NotRegistered", "The user not registered"),
     USER_NOT_FOUND(

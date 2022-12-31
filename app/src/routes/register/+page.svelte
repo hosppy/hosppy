@@ -1,13 +1,23 @@
 <script>
+  import Toast from '$lib/components/Toast.svelte';
   import request from '$lib/utils/request';
 
   let registered = false;
   let email = '';
+  let password = '';
 
   function handleSubmit() {
     request('/accounts', {
       method: 'POST',
       body: JSON.stringify({ email })
+    }).then((res) => {
+      if (res.ok) {
+        registered = true;
+      } else {
+        res.json().then((ret) => {
+          alert(ret.message);
+        });
+      }
     });
   }
 </script>
@@ -33,7 +43,7 @@
         </div>
       </div>
     {:else}
-      <form on:submit|preventDefault={handleSubmit} class="mt-8 space-y-6" o>
+      <form on:submit|preventDefault={handleSubmit} class="mt-8 space-y-6">
         <div class="rounded-md shadow-sm -space-y-px">
           <div>
             <label for="email-address" class="sr-only">邮箱地址</label>
@@ -42,8 +52,21 @@
               type="email"
               autocomplete="email"
               required
-              class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+              class="appearance-none rounded-t-md block w-full box-border px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
               placeholder="邮箱"
+            />
+          </div>
+          <div>
+            <label for="password" class="sr-only">密码</label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              autocomplete="current-password"
+              maxlength="16"
+              required
+              class="appearance-none relative block w-full box-border px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+              placeholder="密码"
             />
           </div>
         </div>
@@ -60,7 +83,7 @@
           </button>
         </div>
         <div>
-          <a href="/login">
+          <a href="/login" class="active:no-underline">
             <button
               class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >

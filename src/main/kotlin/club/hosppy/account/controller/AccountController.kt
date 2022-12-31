@@ -10,13 +10,13 @@ import javax.validation.constraints.Min
 @RestController
 @RequestMapping("/accounts")
 class AccountController(
-    private val accountService: AccountService
+    private val accountService: AccountService,
 ) {
 
     @GetMapping
     fun listAccounts(
         @RequestParam(defaultValue = "0") page: @Min(0) Int,
-        @RequestParam(defaultValue = "10") size: @Min(0) Int
+        @RequestParam(defaultValue = "10") size: @Min(0) Int,
     ): List<AccountDto?>? {
         return accountService.list(page, size)
     }
@@ -27,8 +27,8 @@ class AccountController(
     }
 
     @PostMapping
-    fun createAccount(@RequestBody request: @Valid CreateAccountRequest): AccountDto? {
-        return accountService.create(request.name, request.email, request.phoneNumber)
+    fun createAccount(@RequestBody @Valid request: CreateAccountRequest): AccountDto? {
+        return accountService.create(request.name, request.email, request.phoneNumber, request.password)
     }
 
     @PutMapping("/password")
@@ -42,13 +42,8 @@ class AccountController(
     }
 
     @GetMapping("/activate/{token}")
-    fun verifyActivateToken(@PathVariable token: String?) {
-        accountService.verifyActivateToken(token)
-    }
-
-    @PostMapping("/activate/{token}")
-    fun activateAccount(@PathVariable token: String?, @RequestBody request: @Valid ActivateAccountRequest) {
-        accountService.activateAccount(token, request.password)
+    fun activateAccount(@PathVariable token: String?) {
+        accountService.activateAccount(token)
     }
 
     companion object {

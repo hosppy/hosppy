@@ -30,7 +30,7 @@ class AccountService(
     private val entityManager: EntityManager,
     private val passwordEncoder: PasswordEncoder,
     private val emailService: EmailService,
-    @Value("\${hosppy.web-domain}") private val webDomain: String
+    @Value("\${hosppy.web-domain}") private val webDomain: String,
 ) {
     fun getByEmail(email: String?): AccountDto {
         val account = accountRepository.findAccountByEmail(email)
@@ -44,27 +44,35 @@ class AccountService(
         return accountPage.stream().asSequence().map(this::convertToDto).toList()
     }
 
-    fun create(name: String?, email: String, phoneNumber: String?): AccountDto {
+    fun create(
+        name: String?,
+        email: String,
+        phoneNumber: String?,
+        password: String,
+    ): AccountDto {
         val account = Account().apply {
             this.name = name ?: ""
             this.email = email
         }
-        if (email.isNotBlank()) {
-            val foundAccount = accountRepository.findAccountByEmail(email)
-            if (foundAccount != null) {
-                sendActivateEmail(foundAccount)
-                return convertToDto(foundAccount)
+        val foundAccount = accountRepository.findAccountByEmail(email)
+        if (foundAccount != null) {
+            if (foundAccount.confirmedAndActive) {
+                throw ServiceException(ResultCode.USER_ALREADY_EXISTS)
             }
+            val foundAccountSecret = accountSecretRepository.findAccountSecretByEmail(email)!!
+            foundAccountSecret.passwordHash = passwordEncoder.encode(password)
+            accountSecretRepository.save(foundAccountSecret)
+            sendActivateEmail(foundAccount)
+            return convertToDto(foundAccount)
         }
         try {
             accountRepository.save(account)
+            accountSecretRepository.updatePasswordHashByEmail(email)
+            sendActivateEmail(account)
+            return convertToDto(account)
         } catch (e: Exception) {
             throw ServiceException(ResultCode.UNABLE_CREATE_ACCOUNT, e)
         }
-        if (email.isNotBlank()) {
-            sendActivateEmail(account)
-        }
-        return convertToDto(account)
     }
 
     fun sendActivateEmail(account: Account) {
@@ -127,29 +135,13 @@ class AccountService(
         }
     }
 
-    fun activateAccount(token: String?, password: String?) {
-        val jwt = decodeActivateToken(token)
-        val email = jwt.getClaim(Sign.CLAIM_EMAIL).`as`(String::class.java)
-        val userId = jwt.getClaim(Sign.CLAIM_USER_ID).`as`(Int::class.java)
-        val foundAccount = accountRepository.findAccountById(userId)
-            ?: throw ServiceException(ResultCode.USER_UNREGISTERED)
-        if (foundAccount.confirmedAndActive) {
-            throw ServiceException(ResultCode.USER_ALREADY_ACTIVATED)
-        }
-        foundAccount.email = email
-        foundAccount.confirmedAndActive = true
-        accountRepository.save(foundAccount)
-        val foundAccountSecret = accountSecretRepository.findAccountSecretById(userId)!!
-        foundAccountSecret.passwordHash = passwordEncoder.encode(password)
-        accountSecretRepository.save(foundAccountSecret)
-    }
-
-    fun verifyActivateToken(token: String?) {
+    fun activateAccount(token: String?) {
         val jwt = decodeActivateToken(token)
         val userId = jwt.getClaim(Sign.CLAIM_USER_ID).`as`(Int::class.java)
-        val foundAccount = accountRepository.findAccountById(userId)
-        if (foundAccount != null && foundAccount.confirmedAndActive) {
-            throw ServiceException(ResultCode.USER_ALREADY_ACTIVATED)
+        val foundAccount = accountRepository.findAccountById(userId) ?: throw ServiceException(ResultCode.INVALID_TOKEN)
+        if (!foundAccount.confirmedAndActive) {
+            foundAccount.confirmedAndActive = true
+            accountRepository.save(foundAccount)
         }
     }
 
