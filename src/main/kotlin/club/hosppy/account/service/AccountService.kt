@@ -18,7 +18,6 @@ import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
-import org.springframework.ui.ModelMap
 import javax.persistence.EntityManager
 import kotlin.streams.asSequence
 
@@ -79,15 +78,13 @@ class AccountService(
         val subject = "Activate your Hosppy account"
         val token = createToken(account.id, account.email)
         val link = "$webDomain/activate/$token"
-        val model = ModelMap()
-        model.addAttribute("name", account.name)
-        model.addAttribute("link", link)
+        val params = mapOf("name" to account.name, "link" to link)
         val emailRequest = EmailRequest(
             to = account.email,
             name = account.name,
             subject = subject,
             tmpl = EmailTmpl.ACTIVATE_ACCOUNT,
-            params = model
+            params = params
         )
         try {
             emailService.sendAsync(emailRequest)

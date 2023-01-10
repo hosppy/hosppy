@@ -31,6 +31,17 @@ class AccountController(
         return accountService.create(request.name, request.email, request.phoneNumber, request.password)
     }
 
+    @PutMapping
+    fun updateAccount(@RequestBody @Valid request: UpdateAccountRequest): AccountDto {
+        // TODO get current userId
+        val newAccountDto = AccountDto().apply {
+            name = request.name
+            avatarUrl = request.avatarUrl
+            phoneNumber = request.phoneNumber
+        }
+        return accountService.update(newAccountDto)
+    }
+
     @PutMapping("/password")
     fun updatePassword(@RequestBody request: @Valid UpdatePasswordRequest) {
         accountService.updatePassword(request.userId, request.password)
