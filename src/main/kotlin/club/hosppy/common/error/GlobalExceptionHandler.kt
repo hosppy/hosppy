@@ -17,7 +17,7 @@ class GlobalExceptionHandler {
         }
         val error = BaseResponse(
             code = e.resultCode.code,
-            status = e.resultCode.status,
+            type = e.resultCode.type,
             message = e.resultCode.message
         )
         return ResponseEntity.status(error.code).body(error)
@@ -29,7 +29,7 @@ class GlobalExceptionHandler {
         logger.error("Internal Server Error", e)
         val error = BaseResponse(
             code = HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-            status = "InternalServerError",
+            type = "InternalServerError",
             message = "Internal Server Error"
         )
         return ResponseEntity.internalServerError().body(error)

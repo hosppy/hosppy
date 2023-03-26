@@ -4,7 +4,7 @@ import javax.servlet.http.HttpServletResponse
 
 enum class ResultCode(
     val code: Int = HttpServletResponse.SC_BAD_REQUEST,
-    val status: String,
+    val type: String,
     val message: String,
 ) {
     USER_ALREADY_EXISTS(
@@ -12,7 +12,7 @@ enum class ResultCode(
         "UserExists",
         "The user already exists"
     ),
-    USER_UNREGISTERED(HttpServletResponse.SC_BAD_REQUEST, "NotRegistered", "The user not registered"),
+    USER_UNREGISTERED(HttpServletResponse.SC_BAD_REQUEST, "Unregistered", "The user not registered"),
     USER_NOT_FOUND(
         HttpServletResponse.SC_NOT_FOUND,
         "NotFound",
