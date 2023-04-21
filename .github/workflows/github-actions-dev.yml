@@ -1,8 +1,8 @@
-name: Github Action Dev
+name: CI
 run-name: ${{ github.actor }} is testing out Github Actions
 on: [ push ]
 jobs:
-  Explore-GitHub-Actions:
+  backend-build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -12,4 +12,7 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: 11
-      - run: ./gradlew clean bootJar
+        run: ./gradlew clean bootJar
+
+      - name: Docker build
+        run: docker build -t hosppy/svc .
