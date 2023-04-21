@@ -12,7 +12,7 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: 11
-        run: ./gradlew clean bootJar
+      - run: ./gradlew clean bootJar
 
       - name: Docker build
         run: docker build -t hosppy/svc .
