@@ -3,6 +3,8 @@ FROM gradle:7.6-jdk-alpine AS builder
 COPY ./build.gradle ./
 COPY ./settings.gradle ./
 COPY ./gradlew ./
+COPY ./gradle gradle/
+COPY ./src src/
 
 RUN ./gradlew clean bootJar
 
