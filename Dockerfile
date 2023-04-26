@@ -1,15 +1,12 @@
 FROM gradle:7.6-jdk-alpine AS builder
 
-COPY ./build.gradle ./
-COPY ./settings.gradle ./
-COPY ./gradlew ./
-COPY ./gradle gradle/
+COPY build.gradle settings.gradle ./
+RUN gradle dependencies
 COPY ./src src/
-
-RUN ./gradlew clean bootJar
+RUN gradle clean bootJar
 
 FROM openjdk:11-jre
 
-COPY --from=builder build/libs/*.jar app.jar
+COPY --from=builder build/libs/*.jar /app.jar
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "/app.jar"]
