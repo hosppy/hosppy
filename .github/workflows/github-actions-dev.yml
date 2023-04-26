@@ -1,5 +1,5 @@
-name: CI
-run-name: ${{ github.actor }} is testing out Github Actions
+name: publish
+run-name: Publish hosppy development env
 on: [ push ]
 jobs:
   backend-build:
@@ -7,12 +7,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Set up JDK 11
+      - name: Docker build
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
           java-version: 11
-      - run: ./gradlew clean bootJar
-
-      - name: Docker build
         run: docker build -t hosppy/svc .
