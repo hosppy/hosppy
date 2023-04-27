@@ -28,3 +28,11 @@ jobs:
           context: .
           push: true
           tags: ${{ secrets.REGISTRY_URL }}/hosppy/web:${{ steps.commit.outputs.short }}
+      - name: SSH Remote Commands
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USERNAME }}
+          key: ${{ secrets.DEPLOY_KEY }}
+          script: |
+            whoami
