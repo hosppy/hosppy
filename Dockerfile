@@ -1,4 +1,4 @@
-FROM gradle:7.6-jdk-alpine AS builder
+FROM gradle:7.6-jdk AS builder
 
 COPY build.gradle settings.gradle ./
 RUN gradle dependencies

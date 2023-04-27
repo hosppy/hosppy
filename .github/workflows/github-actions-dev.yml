@@ -1,5 +1,5 @@
-name: publish
-run-name: Publish hosppy development env
+name: Build
+run-name: Build
 on: [ push ]
 jobs:
   backend-build:
@@ -13,4 +13,4 @@ jobs:
           java-version: 11
 
       - name: Docker build
-        run: docker build -t hosppy/svc .
+        run: docker build -t hosppy .
