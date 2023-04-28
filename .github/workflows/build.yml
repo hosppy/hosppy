@@ -1,5 +1,4 @@
-name: Build
-run-name: Build
+name: publish
 on: [ push ]
 jobs:
   backend-build:
@@ -28,11 +27,25 @@ jobs:
           context: .
           push: true
           tags: ${{ secrets.REGISTRY_URL }}/hosppy/web:${{ steps.commit.outputs.short }}
+      - uses: actions/checkout@v0.1.4
+      - name: Copy file via ssh
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USERNAME }}
+          key: ${{ secrets.DEPLOY_KEY }}
+          port: ${{ secrets.PORT }}
+          source: publish/docker-compose.yml
+          target: docker-compose-template.yml
       - name: SSH Remote Commands
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USERNAME }}
           key: ${{ secrets.DEPLOY_KEY }}
+          env:
+            TAG: ${{ steps.commit.outputs.short }}
+            DOCKER_IMAGE: ${{ secrets.REGISTRY_URL }}/hosppy/web
           script: |
-            whoami
+            sed -e "s/\${DOCKER_IMAGE}/$DOCKER_IMAGE/g" -e "s/\${TAG}/$TAG/g" docker-compose-template.yml > docker-compose.yml
+            docker-compose up -d --force-recreate
