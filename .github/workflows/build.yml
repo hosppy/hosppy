@@ -40,7 +40,6 @@ jobs:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USERNAME }}
           key: ${{ secrets.DEPLOY_KEY }}
-          port: ${{ secrets.PORT }}
           source: publish/docker-compose.yml
           target: docker-compose-template.yml
 
