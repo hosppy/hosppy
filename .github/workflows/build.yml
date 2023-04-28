@@ -41,7 +41,8 @@ jobs:
           username: ${{ secrets.DEPLOY_USERNAME }}
           key: ${{ secrets.DEPLOY_KEY }}
           source: publish/docker-compose.yml
-          target: docker-compose-template.yml
+          target: ./
+          strip_components: 1
 
       - name: SSH Remote Commands
         uses: appleboy/ssh-action@v0.1.10
@@ -54,5 +55,5 @@ jobs:
           key: ${{ secrets.DEPLOY_KEY }}
           envs: DOCKER_IMAGE,TAG
           script: |
-            sed -e "s/\${DOCKER_IMAGE}/$DOCKER_IMAGE/g" -e "s/\${TAG}/$TAG/g" docker-compose-template.yml > docker-compose.yml
+            sed -e "s,\${DOCKER_IMAGE},$DOCKER_IMAGE,g" -e "s,\${TAG},$TAG,g" docker-compose-template.yml > docker-compose.yml
             docker-compose up -d --force-recreate

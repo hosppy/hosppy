@@ -1,0 +1,24 @@
+version: '3.7'
+
+services:
+  web:
+    image: hosppy/web:latest
+    environment:
+      - SPRING_PROFILES_ACTIVE
+      - SERVER_PORT
+      - DB_URL
+      - DB_USERNAME
+      - DB_PASSWORD
+      - ALIYUN_ACCESS_KEY
+      - ALIYUN_ACCESS_SECRET
+      - MAIL_FROM
+      - MAIL_FROM_NAME
+      - WEB_DOMAIN
+    networks:
+      - internal_access
+      - external_access
+
+networks:
+  internal_access:
+    internal: true
+  external_access:
