@@ -40,7 +40,7 @@ jobs:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USERNAME }}
           key: ${{ secrets.DEPLOY_KEY }}
-          source: publish/docker-compose.yml
+          source: ./publish/docker-compose-template.yml
           target: ./
           strip_components: 2
 
