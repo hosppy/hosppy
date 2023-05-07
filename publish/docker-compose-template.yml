@@ -3,17 +3,7 @@ version: '3.7'
 services:
   web:
     image: ${DOCKER_IMAGE}:${TAG}
-    environment:
-      - SPRING_PROFILES_ACTIVE
-      - SERVER_PORT
-      - DB_URL
-      - DB_USERNAME
-      - DB_PASSWORD
-      - ALIYUN_ACCESS_KEY
-      - ALIYUN_ACCESS_SECRET
-      - MAIL_FROM
-      - MAIL_FROM_NAME
-      - WEB_DOMAIN
+    env_file: .env
     networks:
       - internal_access
       - external_access
