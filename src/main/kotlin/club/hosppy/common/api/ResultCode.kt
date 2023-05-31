@@ -1,27 +1,25 @@
 package club.hosppy.common.api
 
-import lombok.AllArgsConstructor
-import lombok.Getter
 import javax.servlet.http.HttpServletResponse
 
-@Getter
-@AllArgsConstructor
 enum class ResultCode(
-    val code: Int = 0,
-    val status: String? = null,
-    val message: String? = null
+    val code: Int = HttpServletResponse.SC_BAD_REQUEST,
+    val type: String,
+    val message: String,
 ) {
-    USER_ALREADY_ACTIVATED(
+    USER_ALREADY_EXISTS(
         HttpServletResponse.SC_BAD_REQUEST,
-        "Activated",
-        "The user already activated"
+        "UserExists",
+        "The user already exists"
     ),
-    USER_UNREGISTERED(HttpServletResponse.SC_BAD_REQUEST, "NotRegistered", "The user not registered"), USER_NOT_FOUND(
+    USER_UNREGISTERED(HttpServletResponse.SC_BAD_REQUEST, "Unregistered", "The user not registered"),
+    USER_NOT_FOUND(
         HttpServletResponse.SC_NOT_FOUND,
         "NotFound",
         "User with specified id is not found"
     ),
-    INVALID_TOKEN(HttpServletResponse.SC_BAD_REQUEST, "InvalidToken", "Invalid token"), NO_SIGNING_TOKEN(
+    INVALID_TOKEN(HttpServletResponse.SC_BAD_REQUEST, "InvalidToken", "Invalid token"),
+    NO_SIGNING_TOKEN(
         HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
         "NoSigningToken",
         "No signing token present"

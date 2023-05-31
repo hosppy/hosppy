@@ -3,34 +3,43 @@ package club.hosppy.account.controller
 import club.hosppy.account.dto.*
 import club.hosppy.account.service.AccountService
 import com.github.structlog4j.SLoggerFactory
-import lombok.RequiredArgsConstructor
 import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
 import javax.validation.constraints.Min
 
-@RequiredArgsConstructor
 @RestController
 @RequestMapping("/accounts")
 class AccountController(
-    private val accountService: AccountService
+    private val accountService: AccountService,
 ) {
 
     @GetMapping
     fun listAccounts(
-        @RequestParam(defaultValue = "0") offset: @Min(0) Int,
-        @RequestParam(defaultValue = "10") limit: @Min(0) Int
+        @RequestParam(defaultValue = "0") page: @Min(0) Int,
+        @RequestParam(defaultValue = "10") size: @Min(0) Int,
     ): List<AccountDto?>? {
-        return accountService.list(offset, limit)
+        return accountService.list(page, size)
     }
 
-    @GetMapping("/{userId}")
-    fun getAccount(@PathVariable userId: String?): AccountDto? {
-        return accountService[userId]
+    @GetMapping("/{email}")
+    fun getAccount(@PathVariable email: String?): AccountDto? {
+        return accountService.getByEmail(email)
     }
 
     @PostMapping
-    fun createAccount(@RequestBody request: @Valid CreateAccountRequest): AccountDto? {
-        return accountService.create(request.name, request.email, request.phoneNumber)
+    fun createAccount(@RequestBody @Valid request: CreateAccountRequest): AccountDto? {
+        return accountService.create(request.name, request.email, request.phoneNumber, request.password)
+    }
+
+    @PutMapping
+    fun updateAccount(@RequestBody @Valid request: UpdateAccountRequest): AccountDto {
+        // TODO get current userId
+        val newAccountDto = AccountDto().apply {
+            name = request.name
+            avatarUrl = request.avatarUrl
+            phoneNumber = request.phoneNumber
+        }
+        return accountService.update(newAccountDto)
     }
 
     @PutMapping("/password")
@@ -44,13 +53,8 @@ class AccountController(
     }
 
     @GetMapping("/activate/{token}")
-    fun verifyActivateToken(@PathVariable token: String?) {
-        accountService.verifyActivateToken(token)
-    }
-
-    @PostMapping("/activate/{token}")
-    fun activateAccount(@PathVariable token: String?, @RequestBody request: @Valid ActivateAccountRequest) {
-        accountService.activateAccount(token, request.password)
+    fun activateAccount(@PathVariable token: String) {
+        accountService.activateAccount(token)
     }
 
     companion object {

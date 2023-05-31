@@ -5,6 +5,6 @@ import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotEmpty
 
 class EmailConfirmation {
-    val userId: @NotBlank String? = null
-    val email: @NotEmpty @Email String? = null
+    lateinit var userId: @NotBlank String
+    lateinit var email: @NotEmpty @Email String
 }

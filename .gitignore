@@ -19,7 +19,8 @@ build/
 
 ### IntelliJ IDEA ###
 .idea
-.run
+.fastRequest
+.jpb
 *.iws
 *.iml
 *.ipr
