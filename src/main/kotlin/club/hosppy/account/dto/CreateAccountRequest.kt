@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank
 import javax.validation.constraints.Size
 
 class CreateAccountRequest {
-    val name: String? = null
+    val name: String = ""
 
     @Email(message = "Invalid email")
     val email: String = ""

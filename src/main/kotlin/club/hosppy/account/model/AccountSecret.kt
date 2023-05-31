@@ -9,7 +9,7 @@ import javax.persistence.Table
 class AccountSecret {
     @Id
     var id: Int? = null
-    var passwordHash: String? = null
-    var email: String? = null
+    var passwordHash: String = ""
+    var email: String = ""
     var confirmedAndActive = false
 }

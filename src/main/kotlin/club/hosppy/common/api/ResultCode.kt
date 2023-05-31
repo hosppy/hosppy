@@ -49,5 +49,7 @@ enum class ResultCode(
         "NotFound",
         "404 Not Found"
     ),
-    INTERNAL_SERVER_ERROR(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "InternalServerError", "Internal Server Error");
+    INTERNAL_SERVER_ERROR(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "InternalServerError", "Internal Server Error"),
+    AUTHENTICATE_FAILED(HttpServletResponse.SC_BAD_REQUEST, "AuthenticateFailed", "Authenticate failed"),
+    ;
 }

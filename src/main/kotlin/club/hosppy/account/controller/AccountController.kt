@@ -1,7 +1,7 @@
 package club.hosppy.account.controller
 
 import club.hosppy.account.dto.*
-import club.hosppy.account.service.AccountService
+import club.hosppy.account.service.AccountApplicationService
 import com.github.structlog4j.SLoggerFactory
 import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
@@ -10,7 +10,7 @@ import javax.validation.constraints.Min
 @RestController
 @RequestMapping("/accounts")
 class AccountController(
-    private val accountService: AccountService,
+    private val accountApplicationService: AccountApplicationService,
 ) {
 
     @GetMapping
@@ -18,17 +18,17 @@ class AccountController(
         @RequestParam(defaultValue = "0") page: @Min(0) Int,
         @RequestParam(defaultValue = "10") size: @Min(0) Int,
     ): List<AccountDto?>? {
-        return accountService.list(page, size)
+        return accountApplicationService.list(page, size)
     }
 
     @GetMapping("/{email}")
-    fun getAccount(@PathVariable email: String?): AccountDto? {
-        return accountService.getByEmail(email)
+    fun get(@PathVariable email: String): AccountDto {
+        return accountApplicationService.getByEmail(email)
     }
 
     @PostMapping
-    fun createAccount(@RequestBody @Valid request: CreateAccountRequest): AccountDto? {
-        return accountService.create(request.name, request.email, request.phoneNumber, request.password)
+    fun createAccount(@RequestBody @Valid request: CreateAccountRequest): AccountDto {
+        return accountApplicationService.create(request.name, request.email, request.phoneNumber, request.password)
     }
 
     @PutMapping
@@ -39,22 +39,27 @@ class AccountController(
             avatarUrl = request.avatarUrl
             phoneNumber = request.phoneNumber
         }
-        return accountService.update(newAccountDto)
+        return accountApplicationService.update(newAccountDto)
     }
 
     @PutMapping("/password")
     fun updatePassword(@RequestBody request: @Valid UpdatePasswordRequest) {
-        accountService.updatePassword(request.userId, request.password)
+        accountApplicationService.updatePassword(request.userId, request.password)
     }
 
     @PostMapping("/email")
     fun changeEmail(request: EmailConfirmation) {
-        accountService.changeEmailAndActivateAccount(request.email, request.userId)
+        accountApplicationService.changeEmail(request.email, request.userId)
     }
 
     @GetMapping("/activate/{token}")
     fun activateAccount(@PathVariable token: String) {
-        accountService.activateAccount(token)
+        accountApplicationService.activateAccount(token)
+    }
+
+    @PostMapping("/authentication")
+    fun authentication(@RequestBody request: AuthenticationRequest) {
+        accountApplicationService.authenticate(request.email, request.password)
     }
 
     companion object {

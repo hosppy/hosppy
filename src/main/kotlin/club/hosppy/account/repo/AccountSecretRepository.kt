@@ -8,14 +8,8 @@ import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 
 @Repository
-interface AccountSecretRepository : JpaRepository<AccountSecret?, String?> {
-    fun findByEmail(email: String?): AccountSecret?
-    fun findById(id: Int?): AccountSecret?
-
-    @Modifying(clearAutomatically = true)
-    @Query("UPDATE AccountSecret account SET account.passwordHash = :passwordHash WHERE account.id = :id")
-    @Transactional
-    fun updatePasswordHashById(passwordHash: String?, id: String?): Int
+interface AccountSecretRepository : JpaRepository<AccountSecret, Int> {
+    fun findByEmail(email: String): AccountSecret
 
     @Modifying(clearAutomatically = true)
     @Query("UPDATE AccountSecret account SET account.passwordHash = :passwordHash WHERE account.email = :email")
