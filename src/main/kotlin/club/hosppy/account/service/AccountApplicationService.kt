@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
-import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import javax.persistence.EntityManager
 import kotlin.streams.asSequence
@@ -29,7 +28,6 @@ class AccountApplicationService(
     private val accountSecretRepository: AccountSecretRepository,
     private val modelMapper: ModelMapper,
     private val entityManager: EntityManager,
-    private val passwordEncoder: PasswordEncoder,
     private val emailService: EmailService,
     private val accountService: AccountService,
     @Value("\${hosppy.web-domain}") private val webDomain: String,
@@ -62,7 +60,7 @@ class AccountApplicationService(
             sendActivateEmail(account)
             return convertToDto(account)
         }
-        val accountSecret = accountSecretRepository.findByEmail(email)
+        val accountSecret = accountSecretRepository.findByEmail(email)!!
         accountService.modifyPassword(accountSecret, password)
         sendActivateEmail(foundAccount)
         return convertToDto(foundAccount)
@@ -139,15 +137,6 @@ class AccountApplicationService(
         } catch (e: JWTVerificationException) {
             throw ServiceException(ResultCode.INVALID_TOKEN)
         }
-    }
-
-    fun authenticate(email: String, password: String) {
-        val accountSecret = accountSecretRepository.findByEmail(email) ?: throw ServiceException(ResultCode.USER_NOT_FOUND)
-        if (!accountService.matchPassword(accountSecret, password)) {
-            throw ServiceException(ResultCode.AUTHENTICATE_FAILED)
-        }
-        // TODO
-
     }
 
     private fun convertToDto(account: Account?): AccountDto = modelMapper.map(account, AccountDto::class.java)

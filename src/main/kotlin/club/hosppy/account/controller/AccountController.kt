@@ -57,11 +57,6 @@ class AccountController(
         accountApplicationService.activateAccount(token)
     }
 
-    @PostMapping("/authentication")
-    fun authentication(@RequestBody request: AuthenticationRequest) {
-        accountApplicationService.authenticate(request.email, request.password)
-    }
-
     companion object {
         private val logger = SLoggerFactory.getLogger(AccountController::class.java)
     }
