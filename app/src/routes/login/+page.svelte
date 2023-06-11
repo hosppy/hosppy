@@ -14,7 +14,7 @@
             type="email"
             autocomplete="email"
             required
-            class="appearance-none relative block w-full box-border px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+            class="input rounded-t-md"
             placeholder="邮箱"
           />
         </div>
@@ -27,7 +27,7 @@
             autocomplete="current-password"
             maxlength="16"
             required
-            class="appearance-none relative block w-full box-border px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+            class="input rounded-b-md"
             placeholder="密码"
           />
         </div>
@@ -39,7 +39,7 @@
             id="remember-me"
             name="remember-me"
             type="checkbox"
-            class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+            class="input-checkbox"
           />
           <label for="remember-me" class="ml-2 block text-sm text-gray-900"> 记住我 </label>
         </div>
@@ -50,20 +50,11 @@
       </div>
 
       <div>
-        <button
-          type="submit"
-          class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        >
-          登录
-        </button>
+        <button type="submit" class="btn"> 登录 </button>
       </div>
       <div>
         <a href="/register" class="no-underline">
-          <button
-            class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
-            注册
-          </button>
+          <button class="btn"> 注册 </button>
         </a>
       </div>
     </form>

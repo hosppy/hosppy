@@ -18,6 +18,8 @@ class WebSecurityConfig {
             .csrf()
             .disable()
             .authorizeRequests()
+            .antMatchers("/api/accounts/activate/**")
+            .permitAll()
             .anyRequest()
             .authenticated()
             .and()

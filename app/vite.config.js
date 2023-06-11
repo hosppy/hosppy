@@ -1,5 +1,6 @@
 import { sveltekit } from '@sveltejs/kit/vite';
-import UnoCss from 'unocss/vite';
+import dotenv from 'dotenv';
+import dotenvExpand from 'dotenv-expand';
 import {
   presetIcons,
   presetTypography,
@@ -8,12 +9,15 @@ import {
   transformerDirectives,
   transformerVariantGroup
 } from 'unocss';
+import UnoCss from 'unocss/vite';
+import { defineConfig } from 'vite';
+import myPreset from './my-preset';
 
 /** @type {import('vite').UserConfig} */
 const config = {
   plugins: [
     UnoCss({
-      presets: [presetUno(), presetTypography(), presetIcons({ scale: 2.0 })],
+      presets: [presetUno(), myPreset(), presetTypography(), presetIcons({ scale: 2.0 })],
       transformers: [transformerDirectives(), transformerVariantGroup(), transformerCompileClass()]
     }),
     sveltekit()
@@ -28,4 +32,8 @@ const config = {
   }
 };
 
-export default config;
+export default ({ mode }) => {
+  let myEnv = dotenv.config();
+  dotenvExpand.expand(myEnv);
+  return defineConfig(config);
+};

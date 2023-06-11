@@ -1,5 +1,4 @@
 <script>
-  import Toast from '$lib/components/Toast.svelte';
   import request from '$lib/utils/request';
 
   let registered = false;
@@ -34,12 +33,7 @@
           <span class="text-indigo-500" />，请注意查收！
         </p>
         <div>
-          <a
-            href="/login"
-            class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
-            已有账号？立即登录
-          </a>
+          <a href="/login" class="btn"> 已有账号？立即登录 </a>
         </div>
       </div>
     {:else}
@@ -52,7 +46,7 @@
               type="email"
               autocomplete="email"
               required
-              class="appearance-none rounded-t-md block w-full box-border px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+              class="input rounded-t-md"
               placeholder="邮箱"
             />
           </div>
@@ -65,7 +59,7 @@
               autocomplete="current-password"
               maxlength="16"
               required
-              class="appearance-none relative block w-full box-border px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+              class="input rounded-b-md"
               placeholder="密码"
             />
           </div>
@@ -75,20 +69,11 @@
         </span>
 
         <div>
-          <button
-            type="submit"
-            class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
-            注册
-          </button>
+          <button type="submit" class="btn"> 注册 </button>
         </div>
         <div>
           <a href="/login" class="no-underline">
-            <button
-              class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
-              已有账号？立即登录
-            </button>
+            <button class="btn"> 已有账号？立即登录 </button>
           </a>
         </div>
       </form>
