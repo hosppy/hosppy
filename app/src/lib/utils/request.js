@@ -9,6 +9,7 @@ export default function request(route, options) {
     headers: {
       'Content-Type': 'application/json'
     },
+    credentials: 'include',
     ...options
   });
 }

@@ -11,8 +11,8 @@ export default function myPreset() {
       'nav-link':
         'px-4 inline-flex items-center rounded-0 border-solid border-0 border-transparent border-b-2 hover:border-gray-300 text-dark dark:text-white text-sm font-medium dark:hover:bg-gray-700 decoration-none',
       'dropdown-menu':
-        'relative right-0 w-56 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none m-0 p-0',
-      'dropdown-item': 'block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100',
+        'right-0 w-56 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none m-0 p-0',
+      'dropdown-item': 'block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 decoration-none',
       'dropdown-divider': 'border-gray-100 m-y-0 h-0 border-1 border-solid op-100 overflow-hidden'
     }
   };

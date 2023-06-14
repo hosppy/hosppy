@@ -12,8 +12,10 @@
 		"format": "prettier --plugin-search-dir . --write ."
 	},
 	"devDependencies": {
+		"@iconify-json/uim": "^1.1.5",
 		"@sveltejs/adapter-node": "^1.2.4",
 		"@sveltejs/kit": "^1.20.2",
+		"@unocss/preset-icons": "^0.53.1",
 		"@unocss/preset-uno": "^0.53.1",
 		"prettier": "^2.8.8",
 		"prettier-plugin-svelte": "^2.10.1",
