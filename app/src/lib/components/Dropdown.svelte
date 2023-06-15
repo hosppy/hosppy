@@ -3,19 +3,17 @@
 
   export let label = 'Dropdown';
   /**
-   * @type {any[]}
+   * @type {string[]}
    */
-  export let items = ['item-1', 'item-2', 'item-3'];
+  export let items = [];
 
   let isOpen = false;
 
   function toggleDropdown() {
-    console.log(isOpen);
     isOpen = !isOpen;
   }
 
   function handleClickOutside(event) {
-    console.log('outside' + isOpen);
     if (!event.target.closest('.dropdown-menu')) {
       isOpen = false;
     }
@@ -32,7 +30,11 @@
 
 <div class="relative nav-link">
   <div class="inline-block">
-    <div class="inline-flex items-center w-full" on:click|stopPropagation={toggleDropdown}>
+    <div
+      class="inline-flex items-center w-full"
+      on:click|stopPropagation={toggleDropdown}
+      on:keyup={toggleDropdown}
+    >
       {label}
       <span class="i-uim-angle-down" />
     </div>

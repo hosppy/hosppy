@@ -35,12 +35,7 @@
 
       <div class="flex items-center justify-between">
         <div class="flex items-center">
-          <input
-            id="remember-me"
-            name="remember-me"
-            type="checkbox"
-            class="input-checkbox"
-          />
+          <input id="remember-me" name="remember-me" type="checkbox" class="input-checkbox" />
           <label for="remember-me" class="ml-2 block text-sm text-gray-900"> 记住我 </label>
         </div>
 
@@ -50,11 +45,11 @@
       </div>
 
       <div>
-        <button type="submit" class="btn"> 登录 </button>
+        <button type="submit" class="w-full btn"> 登录 </button>
       </div>
       <div>
         <a href="/register" class="no-underline">
-          <button class="btn"> 注册 </button>
+          <button class="w-full btn"> 注册 </button>
         </a>
       </div>
     </form>

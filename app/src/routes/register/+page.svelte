@@ -69,11 +69,11 @@
         </span>
 
         <div>
-          <button type="submit" class="btn"> 注册 </button>
+          <button type="submit" class="w-full btn"> 注册 </button>
         </div>
         <div>
           <a href="/login" class="no-underline">
-            <button class="btn"> 已有账号？立即登录 </button>
+            <button class="w-full btn"> 已有账号？立即登录 </button>
           </a>
         </div>
       </form>
