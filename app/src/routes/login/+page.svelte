@@ -1,10 +1,36 @@
+<script>
+  let email = '';
+  let password = '';
+
+  function handleSubmit() {
+    fetch('/api/authentication', {
+      method: 'POST',
+      body: JSON.stringify({
+        username: email,
+        password: password
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include'
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.code === 200) {
+          window.location.href = '/';
+        } else {
+          alert(res.message);
+        }
+      });
+  }
+</script>
+
 <div class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
   <div class="max-w-md w-full space-y-8">
     <div>
       <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">登录账号</h2>
     </div>
-    <form class="mt-8 space-y-6" action="#" method="POST" autocomplete="on">
-      <input type="hidden" name="remember" value="true" />
+    <form class="mt-8 space-y-6" autocomplete="on">
       <div class="rounded-md shadow-sm -space-y-px">
         <div>
           <label for="email-address" class="sr-only">邮箱地址</label>
@@ -16,6 +42,7 @@
             required
             class="input rounded-t-md"
             placeholder="邮箱"
+            bind:value={email}
           />
         </div>
         <div>
@@ -29,6 +56,7 @@
             required
             class="input rounded-b-md"
             placeholder="密码"
+            bind:value={password}
           />
         </div>
       </div>
@@ -40,12 +68,16 @@
         </div>
 
         <div class="text-sm">
-          <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500"> 忘记密码? </a>
+          <a href="/forgot-password" class="font-medium text-indigo-600 hover:text-indigo-500">
+            忘记密码?
+          </a>
         </div>
       </div>
 
       <div>
-        <button type="submit" class="w-full btn"> 登录 </button>
+        <button type="submit" class="w-full btn" on:click|preventDefault={handleSubmit}>
+          登录
+        </button>
       </div>
       <div>
         <a href="/register" class="no-underline">
