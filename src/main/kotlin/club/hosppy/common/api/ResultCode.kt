@@ -9,8 +9,8 @@ enum class ResultCode(
 ) {
     BAD_REQUEST(
         HttpServletResponse.SC_BAD_REQUEST,
-        "IllegalArgument",
-        "Bad Request"
+        "BadRequest",
+        "Illegal arguments"
     ),
     NOT_FOUND(
         HttpServletResponse.SC_NOT_FOUND,
@@ -22,10 +22,10 @@ enum class ResultCode(
         "InternalServerError",
         "Internal Server Error"
     ),
-    AUTHENTICATE_FAILED(
+    BAD_CREDENTIALS(
         HttpServletResponse.SC_UNAUTHORIZED,
-        "BadCredential",
-        "Authenticate failed"
+        "BadCredentials",
+        "The username or password is incorrect"
     ),
     USER_ALREADY_EXISTS(
         HttpServletResponse.SC_BAD_REQUEST,

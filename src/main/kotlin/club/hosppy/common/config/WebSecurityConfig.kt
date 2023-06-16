@@ -4,11 +4,13 @@ import JSONAuthenticationFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration
+import org.springframework.security.authentication.ProviderManager
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
+import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.web.SecurityFilterChain
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession
 
 
@@ -16,13 +18,8 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
 @EnableRedisHttpSession
 @EnableWebSecurity
 class WebSecurityConfig(
-    val authConfiguration: AuthenticationConfiguration
+    private val userDetailsService: UserDetailsService
 ) {
-
-    @Bean
-    fun authenticationManager(): AuthenticationManager {
-        return authConfiguration.getAuthenticationManager()
-    }
 
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
@@ -35,20 +32,26 @@ class WebSecurityConfig(
             .anyRequest()
             .authenticated()
             .and()
-            .addFilterBefore(JSONAuthenticationFilter(authenticationManager()), UsernamePasswordAuthenticationFilter::class.java)
-            .formLogin()
-            .loginProcessingUrl("/api/authentication")
-            .failureHandler(CustomAuthenticationFailureHandler())
-            .permitAll()
-            .and()
+            .addFilter(jsonAuthenticationFilter())
             .exceptionHandling()
-            .authenticationEntryPoint(CustomAuthenticationEntryPoint())
             .and()
             .build()
     }
 
     @Bean
-    fun jsonAuthenticationFilter(authenticationManager: AuthenticationManager): JSONAuthenticationFilter {
-        return JSONAuthenticationFilter(authenticationManager)
+    fun jsonAuthenticationFilter(): JSONAuthenticationFilter {
+        val filter = JSONAuthenticationFilter()
+        filter.setRequiresAuthenticationRequestMatcher(AntPathRequestMatcher("/api/authentication", "POST"))
+        filter.setAuthenticationFailureHandler(CustomAuthenticationFailureHandler())
+        filter.setAuthenticationManager(authenticationManager())
+        return filter
+    }
+
+    @Bean
+    fun authenticationManager(): AuthenticationManager {
+        val daoAuthenticationProvider = DaoAuthenticationProvider();
+        daoAuthenticationProvider.setUserDetailsService(userDetailsService);
+        val providerManager = ProviderManager(daoAuthenticationProvider);
+        return providerManager
     }
 }
