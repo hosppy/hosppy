@@ -2,8 +2,8 @@
   let email = '';
   let password = '';
 
-  function handleSubmit() {
-    fetch('/api/authentication', {
+  async function handleSubmit() {
+    let res = await fetch('/api/authentication', {
       method: 'POST',
       body: JSON.stringify({
         username: email,
@@ -13,15 +13,10 @@
         'Content-Type': 'application/json'
       },
       credentials: 'include'
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.code === 200) {
-          window.location.href = '/';
-        } else {
-          alert(res.message);
-        }
-      });
+    });
+    if (res.status === 200) {
+      window.location.href = '/';
+    }
   }
 </script>
 

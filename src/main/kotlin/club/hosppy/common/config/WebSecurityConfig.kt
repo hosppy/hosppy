@@ -43,6 +43,7 @@ class WebSecurityConfig(
         val filter = JSONAuthenticationFilter()
         filter.setRequiresAuthenticationRequestMatcher(AntPathRequestMatcher("/api/authentication", "POST"))
         filter.setAuthenticationFailureHandler(CustomAuthenticationFailureHandler())
+        filter.setAuthenticationSuccessHandler(CustomAuthenticationSuccessHandler())
         filter.setAuthenticationManager(authenticationManager())
         return filter
     }

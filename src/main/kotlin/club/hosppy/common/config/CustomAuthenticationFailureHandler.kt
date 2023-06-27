@@ -17,7 +17,8 @@ class CustomAuthenticationFailureHandler : AuthenticationFailureHandler {
         response: HttpServletResponse,
         exception: AuthenticationException
     ) {
-        response.contentType = "application/json;charset=utf-8"
+        response.contentType = "application/json"
+        response.characterEncoding = "UTF-8"
         response.status = HttpStatus.UNAUTHORIZED.value()
         val body = BaseResponse(
             code = ResultCode.BAD_CREDENTIALS.code,

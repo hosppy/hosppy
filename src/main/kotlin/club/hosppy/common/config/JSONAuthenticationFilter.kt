@@ -1,4 +1,5 @@
 import com.fasterxml.jackson.databind.ObjectMapper
+import org.springframework.http.HttpMethod
 import org.springframework.http.MediaType
 import org.springframework.security.authentication.AuthenticationServiceException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -13,7 +14,7 @@ class JSONAuthenticationFilter : UsernamePasswordAuthenticationFilter() {
 
     override fun attemptAuthentication(request: HttpServletRequest, response: HttpServletResponse): Authentication {
         if (MediaType.APPLICATION_JSON_VALUE == request.contentType) {
-            if (!request.method.equals("POST")) {
+            if (!request.method.equals(HttpMethod.POST.name)) {
                 throw AuthenticationServiceException("Authentication method not supported: " + request.method);
             }
             try {
