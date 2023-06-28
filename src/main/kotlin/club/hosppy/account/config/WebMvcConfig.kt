@@ -1,6 +1,5 @@
-package club.hosppy.common.config
+package club.hosppy.account.config
 
-import club.hosppy.account.config.CurrentUserMethodArgumentResolver
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.method.support.HandlerMethodArgumentResolver

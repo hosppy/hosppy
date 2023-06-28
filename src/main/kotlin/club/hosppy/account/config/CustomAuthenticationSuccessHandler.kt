@@ -1,4 +1,4 @@
-package club.hosppy.common.config
+package club.hosppy.account.config
 
 import org.springframework.security.core.Authentication
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler

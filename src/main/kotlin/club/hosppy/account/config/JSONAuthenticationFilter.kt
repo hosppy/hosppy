@@ -1,3 +1,5 @@
+package club.hosppy.account.config
+
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.http.HttpMethod
 import org.springframework.http.MediaType

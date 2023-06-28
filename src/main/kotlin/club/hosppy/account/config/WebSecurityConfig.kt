@@ -1,6 +1,5 @@
-package club.hosppy.common.config
+package club.hosppy.account.config
 
-import JSONAuthenticationFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager
@@ -10,6 +9,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession
 
@@ -24,14 +25,19 @@ class WebSecurityConfig(
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         return http
-            .csrf()
-            .disable()
-            .authorizeRequests()
-            .antMatchers("/api/accounts/activate/**")
-            .permitAll()
-            .anyRequest()
-            .authenticated()
-            .and()
+            .logout {
+                it.logoutUrl("/api/logout")
+                it.invalidateHttpSession(true)
+                it.addLogoutHandler(SecurityContextLogoutHandler())
+                it.logoutSuccessHandler(HttpStatusReturningLogoutSuccessHandler())
+            }
+            .csrf {
+                it.disable()
+            }
+            .authorizeRequests {
+                it.antMatchers("/api/accounts/activate/**").permitAll()
+                it.anyRequest().authenticated()
+            }
             .addFilter(jsonAuthenticationFilter())
             .exceptionHandling()
             .and()

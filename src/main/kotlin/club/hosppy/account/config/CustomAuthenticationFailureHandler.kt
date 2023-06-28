@@ -1,4 +1,4 @@
-package club.hosppy.common.config
+package club.hosppy.account.config
 
 import club.hosppy.common.api.BaseResponse
 import club.hosppy.common.api.ResultCode
