@@ -8,7 +8,7 @@ import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransacti
 
 fun Application.configureDatabases(config: ApplicationConfig) {
 
-    val database = Database.connect(
+    Database.connect(
         driver = config.property("ktor.db.driver").getString(),
         url = config.property("ktor.db.url").getString(),
         user = config.property("ktor.db.username").getString(),

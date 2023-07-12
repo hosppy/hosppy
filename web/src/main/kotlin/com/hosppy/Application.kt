@@ -13,5 +13,5 @@ fun Application.module() {
     configureDatabases(environment.config)
     configureRouting()
     configureKoin()
-    configureExceptionInterceptor()
+    configureInterceptor()
 }
