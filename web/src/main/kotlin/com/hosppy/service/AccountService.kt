@@ -1,6 +1,6 @@
 package com.hosppy.service
 
-import com.hosppy.common.api.ResultCode
+import com.hosppy.common.api.USER_NOT_FOUND
 import com.hosppy.common.error.ServiceException
 import com.hosppy.models.Account
 import com.hosppy.models.Accounts
@@ -14,7 +14,6 @@ class AccountService {
     }
 
     suspend fun getByEmail(email: String) = dbQuery {
-        Account.find { Accounts.email eq email }.firstOrNull()?.toDto()
-            ?: throw ServiceException(ResultCode.USER_NOT_FOUND)
+        Account.find { Accounts.email eq email }.firstOrNull()?.toDto() ?: throw ServiceException(USER_NOT_FOUND)
     }
 }
