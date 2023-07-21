@@ -22,6 +22,9 @@ application {
 }
 
 repositories {
+    maven {
+        url = uri("https://jcenter.bintray.com")
+    }
     mavenCentral()
 }
 
@@ -33,6 +36,7 @@ dependencies {
     implementation("io.ktor:ktor-server-content-negotiation-jvm:$ktor_version")
     implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-html-builder-jvm:$ktor_version")
+    implementation("io.ktor:ktor-server-freemarker:$ktor_version")
     implementation("org.postgresql:postgresql:$postgres_version")
     implementation("com.h2database:h2:$h2_version")
     implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
@@ -44,6 +48,9 @@ dependencies {
     implementation("io.insert-koin:koin-ktor:$koin_ktor")
     implementation("io.insert-koin:koin-logger-slf4j:$koin_ktor")
     implementation("ch.qos.logback:logback-classic:$logback_version")
+    implementation("com.aliyun:dm20151123:1.0.3")
+    implementation("structlog4j:structlog4j-json:1.0.0")
+    implementation("org.modelmapper:modelmapper:3.1.0")
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
 }

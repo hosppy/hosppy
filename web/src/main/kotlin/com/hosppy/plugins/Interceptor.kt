@@ -7,18 +7,18 @@ import io.ktor.server.application.hooks.*
 import io.ktor.server.response.*
 import io.ktor.util.logging.*
 
-internal val LOGGER = KtorSimpleLogger("com.hosppy.plugins.Interceptor")
+internal val log = KtorSimpleLogger("com.hosppy.plugins.Interceptor")
 
 val ExceptionInterceptor = createApplicationPlugin("ExceptionInterceptor") {
     on(CallFailed) { call, cause ->
         when (cause) {
             is ServiceException -> {
-                LOGGER.warn("Service exception occurred", cause)
+                log.warn("Service exception occurred", cause)
                 call.respond(cause.resultCode)
             }
 
             else -> {
-                LOGGER.error(cause)
+                log.error(cause)
                 call.respond(INTERNAL_SERVER_ERROR)
             }
         }
