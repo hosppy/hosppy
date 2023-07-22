@@ -7,6 +7,7 @@ import com.github.structlog4j.IToLog
 import com.hosppy.models.MailProperty
 import com.hosppy.models.MailRequest
 import freemarker.template.Configuration
+import kotlinx.coroutines.runBlocking
 import org.slf4j.LoggerFactory
 import java.io.StringWriter
 
@@ -18,8 +19,7 @@ class MailService(
     private val templateConfiguration: Configuration,
 ) {
 
-    suspend fun send(request: MailRequest) {
-        val fileName = request.tmpl.name
+    fun send(request: MailRequest) = runBlocking {
         val tmpl = templateConfiguration.getTemplate(request.tmpl.name)
         val writer = StringWriter()
         tmpl.process(request.params, writer)

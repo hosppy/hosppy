@@ -1,5 +1,6 @@
 package com.hosppy.plugins
 
+import com.aliyun.dm20151123.Client
 import com.aliyun.teaopenapi.models.Config
 import com.hosppy.common.constant.ALIYUN_ENDPOINT
 import com.hosppy.common.constant.ALIYUN_REGION_ID
@@ -20,18 +21,21 @@ fun Application.configureKoin() {
 
     val appModule = module {
         single {
-            Config()
-                .setAccessKeyId(aliyunAccessKey)
-                .setAccessKeySecret(aliyunAccessSecret)
-                .setRegionId(ALIYUN_REGION_ID)
-                .setEndpoint(ALIYUN_ENDPOINT)
+            Client(
+                Config()
+                    .setAccessKeyId(aliyunAccessKey)
+                    .setAccessKeySecret(aliyunAccessSecret)
+                    .setRegionId(ALIYUN_REGION_ID)
+                    .setEndpoint(ALIYUN_ENDPOINT)
+            )
         }
         single { MailProperty(mailFrom, mailFromName) }
         single { AccountService() }
         single {
             Configuration(Configuration.getVersion()).apply {
-                setClassForTemplateLoading(javaClass, "templates")
-                setDefaultEncoding("UTF-8");
+                setClassForTemplateLoading(javaClass, "/templates")
+                recognizeStandardFileExtensions = true
+                defaultEncoding = "UTF-8";
             }
         }
         single { MailService(get(), get(), get()) }

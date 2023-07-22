@@ -1,13 +1,23 @@
 package com.hosppy.models
 
-data class MailTmpl(val name: String)
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonElement
 
+@Serializable
+@JvmInline
+value class MailTmpl(val name: String) {
+    companion object {
+        val ACTIVATE_ACCOUNT = MailTmpl("activate_account")
+    }
+}
+
+@Serializable
 data class MailRequest(
     val to: String,
     val subject: String,
     val name: String,
     val tmpl: MailTmpl,
-    val params: Map<String, Any> = mapOf()
+    val params: JsonElement,
 )
 
 data class MailProperty(
