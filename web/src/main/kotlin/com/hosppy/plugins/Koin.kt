@@ -18,6 +18,7 @@ fun Application.configureKoin() {
     val aliyunAccessSecret = environment.config.property("hosppy.aliyunAccessSecret").getString()
     val mailFrom = environment.config.property("hosppy.mailFrom").getString()
     val mailFromName = environment.config.property("hosppy.mailFromName").getString()
+    val webDomain = environment.config.property("hosppy.webDomain").getString()
 
     val appModule = module {
         single {
@@ -30,7 +31,7 @@ fun Application.configureKoin() {
             )
         }
         single { MailProperty(mailFrom, mailFromName) }
-        single { AccountService() }
+        single { AccountService(get(), webDomain) }
         single {
             Configuration(Configuration.getVersion()).apply {
                 setClassForTemplateLoading(javaClass, "/templates")

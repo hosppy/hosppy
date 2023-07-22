@@ -1,6 +1,6 @@
 package com.hosppy.plugins
 
-import com.hosppy.common.api.INTERNAL_SERVER_ERROR
+import com.hosppy.common.api.ResultCode
 import com.hosppy.common.error.ServiceException
 import io.ktor.server.application.*
 import io.ktor.server.application.hooks.*
@@ -19,7 +19,7 @@ val ExceptionInterceptor = createApplicationPlugin("ExceptionInterceptor") {
 
             else -> {
                 log.error(cause)
-                call.respond(INTERNAL_SERVER_ERROR)
+                call.respond(ResultCode.INTERNAL_SERVER_ERROR)
             }
         }
     }

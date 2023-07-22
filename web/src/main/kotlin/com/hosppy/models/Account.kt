@@ -1,5 +1,6 @@
 package com.hosppy.models
 
+import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.dao.IntEntity
@@ -14,8 +15,8 @@ object Accounts : IntIdTable("account") {
     val passwordHash: Column<String> = varchar("password_hash", 255)
     val email: Column<String> = varchar("email", 255).uniqueIndex()
     val phoneNumber: Column<String?> = varchar("phone_number", 255).uniqueIndex().nullable()
-    val memberSince: Column<Instant> = timestamp("member_since")
-    val confirmedAndActive: Column<Boolean> = bool("confirmed_and_active")
+    val memberSince: Column<Instant> = timestamp("member_since").default(Clock.System.now())
+    val confirmedAndActive: Column<Boolean> = bool("confirmed_and_active").default(false)
     val avatarUrl: Column<String?> = varchar("avatar_url", 255).default("").nullable()
 }
 
@@ -53,3 +54,11 @@ fun Account.toDto(): AccountDto {
     dto.avatarUrl = avatarUrl
     return dto
 }
+
+@Serializable
+data class CreateAccountRequest(
+    val name: String = "",
+    val email: String = "",
+    val password: String = "",
+    val phoneNumber: String = "",
+)

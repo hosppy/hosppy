@@ -5,6 +5,6 @@ import com.hosppy.common.api.ResultCode
 data class ServiceException(
     val resultCode: ResultCode,
     override val cause: Throwable?,
-) : RuntimeException(cause) {
+) : RuntimeException(resultCode.message, cause) {
     constructor(resultCode: ResultCode) : this(resultCode, null)
 }

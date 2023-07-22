@@ -1,7 +1,6 @@
 package com.hosppy.models
 
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JsonElement
 
 @Serializable
 @JvmInline
@@ -17,7 +16,7 @@ data class MailRequest(
     val subject: String,
     val name: String,
     val tmpl: MailTmpl,
-    val params: JsonElement,
+    val params: Map<String, String>,
 )
 
 data class MailProperty(

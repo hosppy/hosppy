@@ -5,6 +5,11 @@ val postgres_version: String by project
 val h2_version: String by project
 val exposed_version: String by project
 val koin_ktor: String by project
+val aliyun_version: String by project
+val flyway_version: String by project
+val bcrypt_version: String by project
+val modelmapper_version: String by project
+val kotlinx_datetime_version: String by project
 
 plugins {
     kotlin("jvm") version "1.8.22"
@@ -43,15 +48,16 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-kotlin-datetime:$exposed_version")
-    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:$kotlinx_datetime_version")
     implementation("io.ktor:ktor-server-netty-jvm:$ktor_version")
     implementation("io.insert-koin:koin-ktor:$koin_ktor")
     implementation("io.insert-koin:koin-logger-slf4j:$koin_ktor")
     implementation("ch.qos.logback:logback-classic:$logback_version")
-    implementation("com.aliyun:dm20151123:1.0.3")
+    implementation("com.aliyun:dm20151123:$aliyun_version")
     implementation("structlog4j:structlog4j-json:1.0.0")
-    implementation("org.modelmapper:modelmapper:3.1.0")
-    implementation("org.flywaydb:flyway-core:8.5.13")
+    implementation("org.modelmapper:modelmapper:$modelmapper_version")
+    implementation("org.flywaydb:flyway-core:$flyway_version")
+    implementation("at.favre.lib:bcrypt:$bcrypt_version")
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
 }
