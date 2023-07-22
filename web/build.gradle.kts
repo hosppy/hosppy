@@ -51,6 +51,7 @@ dependencies {
     implementation("com.aliyun:dm20151123:1.0.3")
     implementation("structlog4j:structlog4j-json:1.0.0")
     implementation("org.modelmapper:modelmapper:3.1.0")
+    implementation("org.flywaydb:flyway-core:8.5.13")
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
 }

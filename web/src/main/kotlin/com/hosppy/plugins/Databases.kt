@@ -3,10 +3,20 @@ package com.hosppy.plugins
 import io.ktor.server.application.*
 import io.ktor.server.config.*
 import kotlinx.coroutines.Dispatchers
+import org.flywaydb.core.Flyway
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 
 fun Application.configureDatabases(config: ApplicationConfig) {
+    val flywayConfig = Flyway.configure().dataSource(
+        config.property("ktor.db.url").getString(),
+        config.property("ktor.db.username").getString(),
+        config.property("ktor.db.password").getString()
+    )
+    flywayConfig.cleanDisabled(true)
+    flywayConfig.validateOnMigrate(true)
+    flywayConfig.baselineOnMigrate(true)
+    flywayConfig.load().migrate()
 
     Database.connect(
         driver = config.property("ktor.db.driver").getString(),
