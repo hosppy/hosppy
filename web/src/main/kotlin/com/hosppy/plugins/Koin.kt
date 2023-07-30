@@ -4,11 +4,13 @@ import com.aliyun.dm20151123.Client
 import com.aliyun.teaopenapi.models.Config
 import com.hosppy.common.constant.ALIYUN_ENDPOINT
 import com.hosppy.common.constant.ALIYUN_REGION_ID
+import com.hosppy.common.crypto.Sign
 import com.hosppy.models.MailProperty
 import com.hosppy.service.AccountService
 import com.hosppy.service.MailService
 import freemarker.template.Configuration
 import io.ktor.server.application.*
+import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 import org.koin.ktor.plugin.koin
 import org.koin.logger.slf4jLogger
@@ -19,6 +21,7 @@ fun Application.configureKoin() {
     val mailFrom = environment.config.property("hosppy.mailFrom").getString()
     val mailFromName = environment.config.property("hosppy.mailFromName").getString()
     val webDomain = environment.config.property("hosppy.webDomain").getString()
+    val secret = environment.config.property("hosppy.signingSecret").getString()
 
     val appModule = module {
         single {
@@ -30,8 +33,9 @@ fun Application.configureKoin() {
                     .setEndpoint(ALIYUN_ENDPOINT)
             )
         }
+        single { Sign(secret) }
         single { MailProperty(mailFrom, mailFromName) }
-        single { AccountService(get(), webDomain) }
+        single { AccountService(get(), webDomain, get()) }
         single {
             Configuration(Configuration.getVersion()).apply {
                 setClassForTemplateLoading(javaClass, "/templates")
@@ -39,7 +43,7 @@ fun Application.configureKoin() {
                 defaultEncoding = "UTF-8";
             }
         }
-        single { MailService(get(), get(), get()) }
+        singleOf(::MailService)
     }
     koin {
         slf4jLogger()

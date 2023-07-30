@@ -11,13 +11,12 @@ import kotlinx.coroutines.runBlocking
 import org.slf4j.LoggerFactory
 import java.io.StringWriter
 
-internal val log = LoggerFactory.getLogger(MailService::class.java)
-
 class MailService(
     private val client: Client,
     private val mailProperty: MailProperty,
     private val templateConfiguration: Configuration,
 ) {
+    private val log = LoggerFactory.getLogger(MailService::class.java)
 
     fun send(request: MailRequest) = runBlocking {
         val tmpl = templateConfiguration.getTemplate(request.tmpl.name)

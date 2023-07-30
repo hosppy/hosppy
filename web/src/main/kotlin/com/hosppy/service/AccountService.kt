@@ -1,29 +1,25 @@
 package com.hosppy.service
 
 import com.hosppy.common.api.ResultCode
+import com.hosppy.common.crypto.Sign
 import com.hosppy.common.error.ServiceException
 import com.hosppy.common.utils.encodePassword
 import com.hosppy.models.*
 import com.hosppy.plugins.dbQuery
-import org.apache.commons.codec.binary.Hex
-import org.jetbrains.exposed.dao.id.EntityID
-import java.security.MessageDigest
 
-class AccountService(private val mailService: MailService, private val webDomain: String) {
+class AccountService(
+    private val mailService: MailService,
+    private val webDomain: String,
+    private val sign: Sign
+) {
 
     suspend fun list() = dbQuery {
         Account.all().map(Account::toDto)
     }
 
-    suspend fun getByEmail(email: String) = dbQuery {
-        Account.find { Accounts.email eq email }.firstOrNull()?.toDto()
-            ?: throw ServiceException(ResultCode.USER_NOT_FOUND)
-    }
-
     suspend fun create(
         name: String,
         email: String,
-        phoneNumber: String,
         password: String
     ): AccountDto = dbQuery {
         val foundAccount = Account.find { Accounts.email eq email }.firstOrNull()
@@ -48,7 +44,7 @@ class AccountService(private val mailService: MailService, private val webDomain
 
     private fun sendActivateMail(account: Account) {
         val subject = "Activate your Hosppy account"
-        val token = createToken(account.id, account.email)
+        val token = sign.generateEmailConfirmationToken(account.id.value, account.email)
         val link = "$webDomain/activate/$token"
         val params = mapOf("name" to account.name, "link" to link)
         val emailRequest = MailRequest(
@@ -65,8 +61,4 @@ class AccountService(private val mailService: MailService, private val webDomain
         }
     }
 
-    private fun createToken(id: EntityID<Int>, email: String): String {
-        val md = MessageDigest.getInstance("SHA-256")
-        return Hex.encodeHexString(md.digest("$id$email${System.currentTimeMillis()}".toByteArray()))
-    }
 }

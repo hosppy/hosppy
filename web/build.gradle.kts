@@ -58,6 +58,8 @@ dependencies {
     implementation("org.modelmapper:modelmapper:$modelmapper_version")
     implementation("org.flywaydb:flyway-core:$flyway_version")
     implementation("at.favre.lib:bcrypt:$bcrypt_version")
+    implementation("com.auth0:java-jwt:4.2.1")
+
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
 }

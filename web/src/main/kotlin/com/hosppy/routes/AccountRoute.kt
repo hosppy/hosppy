@@ -18,12 +18,8 @@ fun Routing.accountRoute() {
         }
         post {
             val request = call.receive(CreateAccountRequest::class)
-            val accountDto = accountService.create(request.name, request.email, request.phoneNumber, request.password)
+            val accountDto = accountService.create(request.name, request.email, request.password)
             call.respond(accountDto)
-        }
-        get("/{email}") {
-            val email = call.parameters["email"].orEmpty()
-            call.respond(accountService.getByEmail(email))
         }
     }
 }
