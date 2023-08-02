@@ -3,6 +3,7 @@ package com.hosppy.service
 import com.hosppy.common.api.ResultCode
 import com.hosppy.common.crypto.Sign
 import com.hosppy.common.error.ServiceException
+import com.hosppy.common.utils.Mapper
 import com.hosppy.common.utils.encodePassword
 import com.hosppy.models.*
 import com.hosppy.plugins.dbQuery
@@ -14,7 +15,7 @@ class AccountService(
 ) {
 
     suspend fun list() = dbQuery {
-        Account.all().map(Account::toDto)
+        Account.all().map<Account, AccountDto>(Mapper::convert)
     }
 
     suspend fun create(
@@ -39,7 +40,7 @@ class AccountService(
             account
         }
         sendActivateMail(updatedAccount)
-        updatedAccount.toDto()
+        Mapper.convert<Account, AccountDto>(updatedAccount)
     }
 
     private fun sendActivateMail(account: Account) {

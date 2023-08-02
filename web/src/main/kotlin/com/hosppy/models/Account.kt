@@ -1,5 +1,6 @@
 package com.hosppy.models
 
+import com.hosppy.common.annotations.AllOpen
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
@@ -9,6 +10,7 @@ import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.kotlin.datetime.timestamp
+import org.modelmapper.PropertyMap
 
 object Accounts : IntIdTable("account") {
     val name: Column<String> = varchar("name", 255)
@@ -20,6 +22,7 @@ object Accounts : IntIdTable("account") {
     val avatarUrl: Column<String?> = varchar("avatar_url", 255).default("").nullable()
 }
 
+@AllOpen
 class Account(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<Account>(Accounts)
 
@@ -32,6 +35,7 @@ class Account(id: EntityID<Int>) : IntEntity(id) {
     var avatarUrl by Accounts.avatarUrl
 }
 
+@AllOpen
 @Serializable
 class AccountDto {
     var id: Int? = null
@@ -43,16 +47,9 @@ class AccountDto {
     var avatarUrl: String? = null
 }
 
-fun Account.toDto(): AccountDto {
-    val dto = AccountDto()
-    dto.id = id.value
-    dto.name = name
-    dto.email = email
-    dto.confirmedAndActive = confirmedAndActive
-    dto.memberSince = memberSince
-    dto.phoneNumber = phoneNumber
-    dto.avatarUrl = avatarUrl
-    return dto
+object AccountMapper : PropertyMap<Account, AccountDto>() {
+    override fun configure() {
+    }
 }
 
 @Serializable

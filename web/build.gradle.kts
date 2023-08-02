@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
@@ -10,11 +12,14 @@ val flyway_version: String by project
 val bcrypt_version: String by project
 val modelmapper_version: String by project
 val kotlinx_datetime_version: String by project
+val jwt_version: String by project
 
 plugins {
     kotlin("jvm") version "1.8.22"
     id("io.ktor.plugin") version "2.3.2"
     id("org.jetbrains.kotlin.plugin.serialization") version "1.8.22"
+    id("org.jetbrains.kotlin.plugin.noarg") version "1.9.0"
+    id("org.jetbrains.kotlin.plugin.allopen") version "1.9.0"
 }
 
 group = "com.hosppy"
@@ -58,8 +63,24 @@ dependencies {
     implementation("org.modelmapper:modelmapper:$modelmapper_version")
     implementation("org.flywaydb:flyway-core:$flyway_version")
     implementation("at.favre.lib:bcrypt:$bcrypt_version")
-    implementation("com.auth0:java-jwt:4.2.1")
+    implementation("com.auth0:java-jwt:$jwt_version")
 
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+}
+
+tasks.withType<KotlinCompile> {
+    kotlinOptions {
+        freeCompilerArgs = listOf("-Xjsr305=strict")
+        jvmTarget = "17"
+    }
+}
+
+noArg {
+    annotation("com.hosppy.common.annotations.NoArg")
+    invokeInitializers = true
+}
+
+allOpen {
+    annotation("com.hosppy.common.annotations.AllOpen")
 }
