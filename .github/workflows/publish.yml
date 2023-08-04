@@ -2,17 +2,22 @@ name: Publish
 on: [ push ]
 jobs:
   build-web:
+    env:
+      WORKING_DIRECTORY: ./web
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.WORKING_DIRECTORY }}
     steps:
       - uses: actions/checkout@v3
 
       - uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
-          java-version: 11
+          java-version: 17
           cache: 'gradle'
 
-      - run: ./gradlew bootJar --no-daemon
+      - run: ./gradlew buildFatJar --no-daemon
 
       - id: commit
         uses: pr-mpt/actions-commit-hash@v2
@@ -30,7 +35,7 @@ jobs:
       - name: Docker build and push
         uses: docker/build-push-action@v4
         with:
-          context: .
+          context: ${{ env.WORKING_DIRECTORY }}
           push: true
           tags: ${{ secrets.REGISTRY_URL }}/hosppy/web:${{ steps.commit.outputs.short }}
 
