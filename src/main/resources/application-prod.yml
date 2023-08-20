@@ -1,2 +1,0 @@
-logging:
-  config: /etc/hosppy/logback-spring.xml
