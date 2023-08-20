@@ -53,6 +53,20 @@ func (au *AccountUpdate) SetPhoneNumber(s string) *AccountUpdate {
 	return au
 }
 
+// SetNillablePhoneNumber sets the "phone_number" field if the given value is not nil.
+func (au *AccountUpdate) SetNillablePhoneNumber(s *string) *AccountUpdate {
+	if s != nil {
+		au.SetPhoneNumber(*s)
+	}
+	return au
+}
+
+// ClearPhoneNumber clears the value of the "phone_number" field.
+func (au *AccountUpdate) ClearPhoneNumber() *AccountUpdate {
+	au.mutation.ClearPhoneNumber()
+	return au
+}
+
 // SetActive sets the "active" field.
 func (au *AccountUpdate) SetActive(b bool) *AccountUpdate {
 	au.mutation.SetActive(b)
@@ -81,12 +95,6 @@ func (au *AccountUpdate) SetNillablePasswordHash(s *string) *AccountUpdate {
 	return au
 }
 
-// ClearPasswordHash clears the value of the "password_hash" field.
-func (au *AccountUpdate) ClearPasswordHash() *AccountUpdate {
-	au.mutation.ClearPasswordHash()
-	return au
-}
-
 // SetAvatarURL sets the "avatar_url" field.
 func (au *AccountUpdate) SetAvatarURL(s string) *AccountUpdate {
 	au.mutation.SetAvatarURL(s)
@@ -98,12 +106,6 @@ func (au *AccountUpdate) SetNillableAvatarURL(s *string) *AccountUpdate {
 	if s != nil {
 		au.SetAvatarURL(*s)
 	}
-	return au
-}
-
-// ClearAvatarURL clears the value of the "avatar_url" field.
-func (au *AccountUpdate) ClearAvatarURL() *AccountUpdate {
-	au.mutation.ClearAvatarURL()
 	return au
 }
 
@@ -157,20 +159,17 @@ func (au *AccountUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := au.mutation.PhoneNumber(); ok {
 		_spec.SetField(account.FieldPhoneNumber, field.TypeString, value)
 	}
+	if au.mutation.PhoneNumberCleared() {
+		_spec.ClearField(account.FieldPhoneNumber, field.TypeString)
+	}
 	if value, ok := au.mutation.Active(); ok {
 		_spec.SetField(account.FieldActive, field.TypeBool, value)
 	}
 	if value, ok := au.mutation.PasswordHash(); ok {
 		_spec.SetField(account.FieldPasswordHash, field.TypeString, value)
 	}
-	if au.mutation.PasswordHashCleared() {
-		_spec.ClearField(account.FieldPasswordHash, field.TypeString)
-	}
 	if value, ok := au.mutation.AvatarURL(); ok {
 		_spec.SetField(account.FieldAvatarURL, field.TypeString, value)
-	}
-	if au.mutation.AvatarURLCleared() {
-		_spec.ClearField(account.FieldAvatarURL, field.TypeString)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, au.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -218,6 +217,20 @@ func (auo *AccountUpdateOne) SetPhoneNumber(s string) *AccountUpdateOne {
 	return auo
 }
 
+// SetNillablePhoneNumber sets the "phone_number" field if the given value is not nil.
+func (auo *AccountUpdateOne) SetNillablePhoneNumber(s *string) *AccountUpdateOne {
+	if s != nil {
+		auo.SetPhoneNumber(*s)
+	}
+	return auo
+}
+
+// ClearPhoneNumber clears the value of the "phone_number" field.
+func (auo *AccountUpdateOne) ClearPhoneNumber() *AccountUpdateOne {
+	auo.mutation.ClearPhoneNumber()
+	return auo
+}
+
 // SetActive sets the "active" field.
 func (auo *AccountUpdateOne) SetActive(b bool) *AccountUpdateOne {
 	auo.mutation.SetActive(b)
@@ -246,12 +259,6 @@ func (auo *AccountUpdateOne) SetNillablePasswordHash(s *string) *AccountUpdateOn
 	return auo
 }
 
-// ClearPasswordHash clears the value of the "password_hash" field.
-func (auo *AccountUpdateOne) ClearPasswordHash() *AccountUpdateOne {
-	auo.mutation.ClearPasswordHash()
-	return auo
-}
-
 // SetAvatarURL sets the "avatar_url" field.
 func (auo *AccountUpdateOne) SetAvatarURL(s string) *AccountUpdateOne {
 	auo.mutation.SetAvatarURL(s)
@@ -263,12 +270,6 @@ func (auo *AccountUpdateOne) SetNillableAvatarURL(s *string) *AccountUpdateOne {
 	if s != nil {
 		auo.SetAvatarURL(*s)
 	}
-	return auo
-}
-
-// ClearAvatarURL clears the value of the "avatar_url" field.
-func (auo *AccountUpdateOne) ClearAvatarURL() *AccountUpdateOne {
-	auo.mutation.ClearAvatarURL()
 	return auo
 }
 
@@ -352,20 +353,17 @@ func (auo *AccountUpdateOne) sqlSave(ctx context.Context) (_node *Account, err e
 	if value, ok := auo.mutation.PhoneNumber(); ok {
 		_spec.SetField(account.FieldPhoneNumber, field.TypeString, value)
 	}
+	if auo.mutation.PhoneNumberCleared() {
+		_spec.ClearField(account.FieldPhoneNumber, field.TypeString)
+	}
 	if value, ok := auo.mutation.Active(); ok {
 		_spec.SetField(account.FieldActive, field.TypeBool, value)
 	}
 	if value, ok := auo.mutation.PasswordHash(); ok {
 		_spec.SetField(account.FieldPasswordHash, field.TypeString, value)
 	}
-	if auo.mutation.PasswordHashCleared() {
-		_spec.ClearField(account.FieldPasswordHash, field.TypeString)
-	}
 	if value, ok := auo.mutation.AvatarURL(); ok {
 		_spec.SetField(account.FieldAvatarURL, field.TypeString, value)
-	}
-	if auo.mutation.AvatarURLCleared() {
-		_spec.ClearField(account.FieldAvatarURL, field.TypeString)
 	}
 	_node = &Account{config: auo.config}
 	_spec.Assign = _node.assignValues

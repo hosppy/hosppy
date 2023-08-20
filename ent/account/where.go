@@ -274,6 +274,16 @@ func PhoneNumberHasSuffix(v string) predicate.Account {
 	return predicate.Account(sql.FieldHasSuffix(FieldPhoneNumber, v))
 }
 
+// PhoneNumberIsNil applies the IsNil predicate on the "phone_number" field.
+func PhoneNumberIsNil() predicate.Account {
+	return predicate.Account(sql.FieldIsNull(FieldPhoneNumber))
+}
+
+// PhoneNumberNotNil applies the NotNil predicate on the "phone_number" field.
+func PhoneNumberNotNil() predicate.Account {
+	return predicate.Account(sql.FieldNotNull(FieldPhoneNumber))
+}
+
 // PhoneNumberEqualFold applies the EqualFold predicate on the "phone_number" field.
 func PhoneNumberEqualFold(v string) predicate.Account {
 	return predicate.Account(sql.FieldEqualFold(FieldPhoneNumber, v))
@@ -389,16 +399,6 @@ func PasswordHashHasSuffix(v string) predicate.Account {
 	return predicate.Account(sql.FieldHasSuffix(FieldPasswordHash, v))
 }
 
-// PasswordHashIsNil applies the IsNil predicate on the "password_hash" field.
-func PasswordHashIsNil() predicate.Account {
-	return predicate.Account(sql.FieldIsNull(FieldPasswordHash))
-}
-
-// PasswordHashNotNil applies the NotNil predicate on the "password_hash" field.
-func PasswordHashNotNil() predicate.Account {
-	return predicate.Account(sql.FieldNotNull(FieldPasswordHash))
-}
-
 // PasswordHashEqualFold applies the EqualFold predicate on the "password_hash" field.
 func PasswordHashEqualFold(v string) predicate.Account {
 	return predicate.Account(sql.FieldEqualFold(FieldPasswordHash, v))
@@ -462,16 +462,6 @@ func AvatarURLHasPrefix(v string) predicate.Account {
 // AvatarURLHasSuffix applies the HasSuffix predicate on the "avatar_url" field.
 func AvatarURLHasSuffix(v string) predicate.Account {
 	return predicate.Account(sql.FieldHasSuffix(FieldAvatarURL, v))
-}
-
-// AvatarURLIsNil applies the IsNil predicate on the "avatar_url" field.
-func AvatarURLIsNil() predicate.Account {
-	return predicate.Account(sql.FieldIsNull(FieldAvatarURL))
-}
-
-// AvatarURLNotNil applies the NotNil predicate on the "avatar_url" field.
-func AvatarURLNotNil() predicate.Account {
-	return predicate.Account(sql.FieldNotNull(FieldAvatarURL))
 }
 
 // AvatarURLEqualFold applies the EqualFold predicate on the "avatar_url" field.

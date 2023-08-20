@@ -19,11 +19,11 @@ func (Account) Fields() []ent.Field {
 		field.Int("id").Positive(),
 		field.String("email").Unique(),
 		field.String("name").Default(""),
-		field.String("phone_number").Unique().Nillable(),
+		field.String("phone_number").Optional().Unique(),
 		field.Bool("active").Default(false),
 		field.Time("created_at").Default(time.Now()).Immutable(),
-		field.String("password_hash").Optional().Default(""),
-		field.String("avatar_url").Optional().Default(""),
+		field.String("password_hash").Default(""),
+		field.String("avatar_url").Default(""),
 	}
 }
 

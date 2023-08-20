@@ -46,6 +46,14 @@ func (ac *AccountCreate) SetPhoneNumber(s string) *AccountCreate {
 	return ac
 }
 
+// SetNillablePhoneNumber sets the "phone_number" field if the given value is not nil.
+func (ac *AccountCreate) SetNillablePhoneNumber(s *string) *AccountCreate {
+	if s != nil {
+		ac.SetPhoneNumber(*s)
+	}
+	return ac
+}
+
 // SetActive sets the "active" field.
 func (ac *AccountCreate) SetActive(b bool) *AccountCreate {
 	ac.mutation.SetActive(b)
@@ -173,14 +181,17 @@ func (ac *AccountCreate) check() error {
 	if _, ok := ac.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "Account.name"`)}
 	}
-	if _, ok := ac.mutation.PhoneNumber(); !ok {
-		return &ValidationError{Name: "phone_number", err: errors.New(`ent: missing required field "Account.phone_number"`)}
-	}
 	if _, ok := ac.mutation.Active(); !ok {
 		return &ValidationError{Name: "active", err: errors.New(`ent: missing required field "Account.active"`)}
 	}
 	if _, ok := ac.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Account.created_at"`)}
+	}
+	if _, ok := ac.mutation.PasswordHash(); !ok {
+		return &ValidationError{Name: "password_hash", err: errors.New(`ent: missing required field "Account.password_hash"`)}
+	}
+	if _, ok := ac.mutation.AvatarURL(); !ok {
+		return &ValidationError{Name: "avatar_url", err: errors.New(`ent: missing required field "Account.avatar_url"`)}
 	}
 	if v, ok := ac.mutation.ID(); ok {
 		if err := account.IDValidator(v); err != nil {
@@ -229,7 +240,7 @@ func (ac *AccountCreate) createSpec() (*Account, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := ac.mutation.PhoneNumber(); ok {
 		_spec.SetField(account.FieldPhoneNumber, field.TypeString, value)
-		_node.PhoneNumber = &value
+		_node.PhoneNumber = value
 	}
 	if value, ok := ac.mutation.Active(); ok {
 		_spec.SetField(account.FieldActive, field.TypeBool, value)

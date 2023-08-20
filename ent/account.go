@@ -22,7 +22,7 @@ type Account struct {
 	// Name holds the value of the "name" field.
 	Name string `json:"name,omitempty"`
 	// PhoneNumber holds the value of the "phone_number" field.
-	PhoneNumber *string `json:"phone_number,omitempty"`
+	PhoneNumber string `json:"phone_number,omitempty"`
 	// Active holds the value of the "active" field.
 	Active bool `json:"active,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
@@ -84,8 +84,7 @@ func (a *Account) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field phone_number", values[i])
 			} else if value.Valid {
-				a.PhoneNumber = new(string)
-				*a.PhoneNumber = value.String
+				a.PhoneNumber = value.String
 			}
 		case account.FieldActive:
 			if value, ok := values[i].(*sql.NullBool); !ok {
@@ -153,10 +152,8 @@ func (a *Account) String() string {
 	builder.WriteString("name=")
 	builder.WriteString(a.Name)
 	builder.WriteString(", ")
-	if v := a.PhoneNumber; v != nil {
-		builder.WriteString("phone_number=")
-		builder.WriteString(*v)
-	}
+	builder.WriteString("phone_number=")
+	builder.WriteString(a.PhoneNumber)
 	builder.WriteString(", ")
 	builder.WriteString("active=")
 	builder.WriteString(fmt.Sprintf("%v", a.Active))

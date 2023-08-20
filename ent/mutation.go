@@ -239,7 +239,7 @@ func (m *AccountMutation) PhoneNumber() (r string, exists bool) {
 // OldPhoneNumber returns the old "phone_number" field's value of the Account entity.
 // If the Account object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *AccountMutation) OldPhoneNumber(ctx context.Context) (v *string, err error) {
+func (m *AccountMutation) OldPhoneNumber(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldPhoneNumber is only allowed on UpdateOne operations")
 	}
@@ -253,9 +253,22 @@ func (m *AccountMutation) OldPhoneNumber(ctx context.Context) (v *string, err er
 	return oldValue.PhoneNumber, nil
 }
 
+// ClearPhoneNumber clears the value of the "phone_number" field.
+func (m *AccountMutation) ClearPhoneNumber() {
+	m.phone_number = nil
+	m.clearedFields[account.FieldPhoneNumber] = struct{}{}
+}
+
+// PhoneNumberCleared returns if the "phone_number" field was cleared in this mutation.
+func (m *AccountMutation) PhoneNumberCleared() bool {
+	_, ok := m.clearedFields[account.FieldPhoneNumber]
+	return ok
+}
+
 // ResetPhoneNumber resets all changes to the "phone_number" field.
 func (m *AccountMutation) ResetPhoneNumber() {
 	m.phone_number = nil
+	delete(m.clearedFields, account.FieldPhoneNumber)
 }
 
 // SetActive sets the "active" field.
@@ -361,22 +374,9 @@ func (m *AccountMutation) OldPasswordHash(ctx context.Context) (v string, err er
 	return oldValue.PasswordHash, nil
 }
 
-// ClearPasswordHash clears the value of the "password_hash" field.
-func (m *AccountMutation) ClearPasswordHash() {
-	m.password_hash = nil
-	m.clearedFields[account.FieldPasswordHash] = struct{}{}
-}
-
-// PasswordHashCleared returns if the "password_hash" field was cleared in this mutation.
-func (m *AccountMutation) PasswordHashCleared() bool {
-	_, ok := m.clearedFields[account.FieldPasswordHash]
-	return ok
-}
-
 // ResetPasswordHash resets all changes to the "password_hash" field.
 func (m *AccountMutation) ResetPasswordHash() {
 	m.password_hash = nil
-	delete(m.clearedFields, account.FieldPasswordHash)
 }
 
 // SetAvatarURL sets the "avatar_url" field.
@@ -410,22 +410,9 @@ func (m *AccountMutation) OldAvatarURL(ctx context.Context) (v string, err error
 	return oldValue.AvatarURL, nil
 }
 
-// ClearAvatarURL clears the value of the "avatar_url" field.
-func (m *AccountMutation) ClearAvatarURL() {
-	m.avatar_url = nil
-	m.clearedFields[account.FieldAvatarURL] = struct{}{}
-}
-
-// AvatarURLCleared returns if the "avatar_url" field was cleared in this mutation.
-func (m *AccountMutation) AvatarURLCleared() bool {
-	_, ok := m.clearedFields[account.FieldAvatarURL]
-	return ok
-}
-
 // ResetAvatarURL resets all changes to the "avatar_url" field.
 func (m *AccountMutation) ResetAvatarURL() {
 	m.avatar_url = nil
-	delete(m.clearedFields, account.FieldAvatarURL)
 }
 
 // Where appends a list predicates to the AccountMutation builder.
@@ -617,11 +604,8 @@ func (m *AccountMutation) AddField(name string, value ent.Value) error {
 // mutation.
 func (m *AccountMutation) ClearedFields() []string {
 	var fields []string
-	if m.FieldCleared(account.FieldPasswordHash) {
-		fields = append(fields, account.FieldPasswordHash)
-	}
-	if m.FieldCleared(account.FieldAvatarURL) {
-		fields = append(fields, account.FieldAvatarURL)
+	if m.FieldCleared(account.FieldPhoneNumber) {
+		fields = append(fields, account.FieldPhoneNumber)
 	}
 	return fields
 }
@@ -637,11 +621,8 @@ func (m *AccountMutation) FieldCleared(name string) bool {
 // error if the field is not defined in the schema.
 func (m *AccountMutation) ClearField(name string) error {
 	switch name {
-	case account.FieldPasswordHash:
-		m.ClearPasswordHash()
-		return nil
-	case account.FieldAvatarURL:
-		m.ClearAvatarURL()
+	case account.FieldPhoneNumber:
+		m.ClearPhoneNumber()
 		return nil
 	}
 	return fmt.Errorf("unknown Account nullable field %s", name)

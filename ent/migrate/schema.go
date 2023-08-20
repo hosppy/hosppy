@@ -14,11 +14,11 @@ var (
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "email", Type: field.TypeString, Unique: true},
 		{Name: "name", Type: field.TypeString, Default: ""},
-		{Name: "phone_number", Type: field.TypeString, Unique: true},
+		{Name: "phone_number", Type: field.TypeString, Unique: true, Nullable: true},
 		{Name: "active", Type: field.TypeBool, Default: false},
 		{Name: "created_at", Type: field.TypeTime},
-		{Name: "password_hash", Type: field.TypeString, Nullable: true, Default: ""},
-		{Name: "avatar_url", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "password_hash", Type: field.TypeString, Default: ""},
+		{Name: "avatar_url", Type: field.TypeString, Default: ""},
 	}
 	// AccountTable holds the schema information for the "account" table.
 	AccountTable = &schema.Table{
