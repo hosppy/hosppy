@@ -5,6 +5,7 @@ import (
 	"github.com/hosppy/oxcoding/internal/routes"
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"log"
 )
 
@@ -15,6 +16,7 @@ func main() {
 	}
 	models.InitDatabase()
 	e := echo.New()
+	e.Use(middleware.Logger())
 	routes.Register(e)
 	e.Logger.Fatal(e.Start(":8080"))
 }
