@@ -13,7 +13,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
-	models.InitConnection()
+	models.InitDatabase()
 	e := echo.New()
 	routes.Register(e)
 	e.Logger.Fatal(e.Start(":8080"))

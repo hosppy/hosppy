@@ -12,7 +12,7 @@ import (
 
 var Client *ent.Client
 
-func InitConnection() {
+func InitDatabase() {
 	db, err := sql.Open("pgx", os.Getenv("DSN"))
 	if err != nil {
 		log.Fatal(err)
