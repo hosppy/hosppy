@@ -6,17 +6,22 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"log"
+	slogecho "github.com/samber/slog-echo"
+	"log/slog"
+	"os"
 )
 
 func main() {
+	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
+	slog.SetDefault(logger)
 	err := godotenv.Load()
 	if err != nil {
-		log.Println("Error loading .env file")
+		slog.Info("Cannot found .env file")
 	}
 	models.InitDatabase()
 	e := echo.New()
-	e.Use(middleware.Logger())
+	e.Use(slogecho.New(logger))
+	e.Use(middleware.Recover())
 	routes.Register(e)
 	e.Logger.Fatal(e.Start(":8080"))
 }

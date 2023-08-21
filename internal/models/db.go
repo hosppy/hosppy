@@ -6,7 +6,7 @@ import (
 	entsql "entgo.io/ent/dialect/sql"
 	"github.com/hosppy/oxcoding/ent"
 	_ "github.com/jackc/pgx/v5/stdlib"
-	"log"
+	"log/slog"
 	"os"
 )
 
@@ -15,7 +15,7 @@ var Client *ent.Client
 func InitDatabase() {
 	db, err := sql.Open("pgx", os.Getenv("DSN"))
 	if err != nil {
-		log.Fatal(err)
+		slog.Error("Cannot connect database", err)
 	}
 	driver := entsql.OpenDB(dialect.Postgres, db)
 	Client = ent.NewClient(ent.Driver(driver))
