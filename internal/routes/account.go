@@ -11,3 +11,7 @@ func GetAccounts(c echo.Context) error {
 	accounts := models.Client.Account.Query().AllX(context.Background())
 	return c.JSON(http.StatusOK, accounts)
 }
+
+func GetProfile(c echo.Context) error {
+	return nil
+}

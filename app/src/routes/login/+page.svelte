@@ -3,7 +3,7 @@
   let password = '';
 
   async function handleSubmit() {
-    let res = await fetch('/api/authentication', {
+    let res = await fetch('/api/authenticate', {
       method: 'POST',
       body: JSON.stringify({
         username: email,

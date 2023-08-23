@@ -7,7 +7,7 @@
    */
 
   onMount(async () => {
-    let res = await fetch('/api/authentication');
+    let res = await fetch('/api/authenticate');
     if (res.status === 200) {
       user.set(await res.json());
     }

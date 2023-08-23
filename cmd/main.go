@@ -5,8 +5,6 @@ import (
 	"github.com/hosppy/oxcoding/internal/routes"
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
-	slogecho "github.com/samber/slog-echo"
 	"log/slog"
 	"os"
 )
@@ -14,14 +12,17 @@ import (
 func main() {
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
 	slog.SetDefault(logger)
-	err := godotenv.Load()
-	if err != nil {
+
+	if err := godotenv.Load(); err != nil {
 		slog.Info("Cannot found .env file")
 	}
+
 	models.InitDatabase()
 	e := echo.New()
-	e.Use(slogecho.New(logger))
-	e.Use(middleware.Recover())
 	routes.Register(e)
-	e.Logger.Fatal(e.Start(":8080"))
+
+	if err := e.Start(":8080"); err != nil {
+		slog.Error("Start server failed", err)
+		return
+	}
 }

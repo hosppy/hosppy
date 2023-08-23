@@ -15,7 +15,7 @@ var Client *ent.Client
 func InitDatabase() {
 	db, err := sql.Open("pgx", os.Getenv("DSN"))
 	if err != nil {
-		slog.Error("Cannot connect database", err)
+		slog.Error("cannot connect database", err)
 	}
 	driver := entsql.OpenDB(dialect.Postgres, db)
 	Client = ent.NewClient(ent.Driver(driver))
