@@ -1,4 +1,4 @@
-package models
+package postgres
 
 import (
 	"database/sql"
@@ -10,13 +10,21 @@ import (
 	"os"
 )
 
-var Client *ent.Client
+type DB struct {
+	*ent.Client
+}
 
-func InitDatabase() {
+func New() *DB {
 	db, err := sql.Open("pgx", os.Getenv("DSN"))
 	if err != nil {
 		slog.Error("cannot connect database", err)
 	}
 	driver := entsql.OpenDB(dialect.Postgres, db)
-	Client = ent.NewClient(ent.Driver(driver))
+	client := ent.NewClient(ent.Driver(driver))
+
+	return &DB{client}
+}
+
+func (db *DB) NewAccountRepository() *AccountRepository {
+	return &AccountRepository{db.Client}
 }

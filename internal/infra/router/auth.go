@@ -1,9 +1,8 @@
-package routes
+package router
 
 import (
 	"github.com/gorilla/sessions"
 	"github.com/hosppy/oxcoding/internal/models/api"
-	"github.com/hosppy/oxcoding/internal/service/auth"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 	"net/http"
@@ -11,12 +10,12 @@ import (
 
 const SessionKey = "session"
 
-func Authenticate(c echo.Context) error {
+func (a *AccountRouter) Authenticate(c echo.Context) error {
 	form := new(api.LoginForm)
 	if err := c.Bind(form); err != nil {
 		return err
 	}
-	account, ok := auth.UsernamePasswordAuthenticate(form.Username, form.Password)
+	account, ok := a.accountService.UsernamePasswordAuthenticate(form.Username, form.Password)
 	if !ok {
 		return c.JSON(http.StatusBadRequest, api.BadCredentialStatus)
 	}
