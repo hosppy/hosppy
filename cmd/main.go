@@ -6,4 +6,5 @@ import (
 
 func main() {
 	a := app.New()
-	a.Start()}
+	a.Start()
+}

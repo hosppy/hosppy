@@ -1,12 +1,13 @@
 package app
 
 import (
+	"log/slog"
+	"os"
+
 	"github.com/hosppy/oxcoding/internal/domain/service"
 	"github.com/hosppy/oxcoding/internal/infra/repository/postgres"
 	"github.com/hosppy/oxcoding/internal/infra/router"
 	"github.com/joho/godotenv"
-	"log/slog"
-	"os"
 )
 
 type App struct {
@@ -38,7 +39,11 @@ func (a *App) Start() {
 
 	e.POST("/authenticate", a.accountRouter.Authenticate)
 
-	if err := e.Start("127.0.0.1:8080"); err != nil {
+	address, ok := os.LookupEnv("ADDRESS")
+	if !ok {
+		address = ":8080"
+	}
+	if err := e.Start(address); err != nil {
 		slog.Error("Start server failed", err)
 		return
 	}
