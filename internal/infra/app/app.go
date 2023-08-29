@@ -38,7 +38,7 @@ func (a *App) Start() {
 
 	e.POST("/authenticate", a.accountRouter.Authenticate)
 
-	if err := e.Start(":8080"); err != nil {
+	if err := e.Start("127.0.0.1:8080"); err != nil {
 		slog.Error("Start server failed", err)
 		return
 	}
