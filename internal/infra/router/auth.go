@@ -2,7 +2,7 @@ package router
 
 import (
 	"github.com/gorilla/sessions"
-	"github.com/hosppy/oxcoding/internal/models/api"
+	"github.com/hosppy/oxcoding/internal/infra/api"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 	"net/http"
