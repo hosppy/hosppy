@@ -1,6 +1,8 @@
 package entity
 
-import "time"
+import (
+	"time"
+)
 
 type Account struct {
 	ID           int
@@ -11,4 +13,6 @@ type Account struct {
 	CreatedAt    time.Time
 	PasswordHash string
 	AvatarURL    string
+
+	Password string
 }

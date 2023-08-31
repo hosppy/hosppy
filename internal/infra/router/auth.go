@@ -15,7 +15,7 @@ func (a *AccountRouter) Authenticate(c echo.Context) error {
 	if err := c.Bind(form); err != nil {
 		return err
 	}
-	account, ok := a.accountService.UsernamePasswordAuthenticate(form.Username, form.Password)
+	account, ok := a.accountService.UsernamePasswordAuthenticate(form.Email, form.Password)
 	if !ok {
 		return c.JSON(http.StatusBadRequest, api.BadCredentialStatus)
 	}

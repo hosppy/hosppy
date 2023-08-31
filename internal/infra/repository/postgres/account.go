@@ -2,11 +2,11 @@ package postgres
 
 import (
 	"context"
-
 	"github.com/hosppy/oxcoding/ent"
 	"github.com/hosppy/oxcoding/ent/account"
 	"github.com/hosppy/oxcoding/internal/domain/entity"
 	"github.com/hosppy/oxcoding/internal/domain/repository"
+	"time"
 )
 
 type AccountRepository struct {
@@ -14,13 +14,6 @@ type AccountRepository struct {
 }
 
 var _ repository.AccountRepository = (*AccountRepository)(nil)
-
-func (a *AccountRepository) FindByEmail(email string) *entity.Account {
-	if res := a.Account.Query().Where(account.Email(email)).FirstX(context.Background()); res != nil {
-		return toEntity(res)
-	}
-	return nil
-}
 
 func toEntity(a *ent.Account) *entity.Account {
 	return &entity.Account{
@@ -33,4 +26,26 @@ func toEntity(a *ent.Account) *entity.Account {
 		PasswordHash: a.PasswordHash,
 		AvatarURL:    a.AvatarURL,
 	}
+}
+
+func (repo *AccountRepository) FindByEmail(email string) *entity.Account {
+	if res := repo.Account.Query().Where(account.Email(email)).FirstX(context.Background()); res != nil {
+		return toEntity(res)
+	}
+	return nil
+}
+
+func (repo *AccountRepository) Create(entity *entity.Account) *entity.Account {
+	create := repo.Account.
+		Create().
+		SetEmail(entity.Email).
+		SetName(entity.Name).
+		SetActive(entity.Active).
+		SetPasswordHash(entity.PasswordHash).
+		SetAvatarURL(entity.AvatarURL).
+		SetCreatedAt(time.Now())
+	if len(entity.PhoneNumber) > 0 {
+		create.SetPhoneNumber(entity.PhoneNumber)
+	}
+	return toEntity(create.SaveX(context.Background()))
 }
