@@ -1,8 +1,27 @@
 import { sveltekit } from '@sveltejs/kit/vite';
+import dotenv from 'dotenv';
+import dotenvExpand from 'dotenv-expand';
+import {
+  presetIcons,
+  presetTypography,
+  presetUno,
+  transformerCompileClass,
+  transformerDirectives,
+  transformerVariantGroup
+} from 'unocss';
+import UnoCss from 'unocss/vite';
+import { defineConfig } from 'vite';
+import myPreset from './my-preset';
 
 /** @type {import('vite').UserConfig} */
 const config = {
-  plugins: [sveltekit()],
+  plugins: [
+    UnoCss({
+      presets: [presetUno(), myPreset(), presetTypography(), presetIcons({ scale: 2.0 })],
+      transformers: [transformerDirectives(), transformerVariantGroup(), transformerCompileClass()]
+    }),
+    sveltekit()
+  ],
   server: {
     proxy: {
       '/api': {
@@ -13,4 +32,8 @@ const config = {
   }
 };
 
-export default config;
+export default ({ mode }) => {
+  let myEnv = dotenv.config();
+  dotenvExpand.expand(myEnv);
+  return defineConfig(config);
+};
