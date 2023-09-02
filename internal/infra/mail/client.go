@@ -3,20 +3,21 @@ package mail
 import (
 	"github.com/aliyun/alibaba-cloud-sdk-go/sdk"
 	"github.com/aliyun/alibaba-cloud-sdk-go/sdk/requests"
+	"github.com/hosppy/oxcoding/internal/config"
 	"log/slog"
-	"os"
 )
 
 type Client struct {
 	*sdk.Client
+	cfg *config.Config
 }
 
-func NewClient() *Client {
-	client, err := sdk.NewClientWithAccessKey("REGION_ID", os.Getenv("ALIYUN_ACCESS_KEY"), os.Getenv("ALIYUN_ACCESS_SECRET"))
+func NewClient(cfg *config.Config) (*Client, error) {
+	client, err := sdk.NewClientWithAccessKey("cn-hangzhou", cfg.AliyunAccessKey, cfg.AliyunAccessSecret)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
-	return &Client{client}
+	return &Client{client, cfg}, nil
 }
 
 func (c *Client) Send(message *Message) {
@@ -29,8 +30,8 @@ func (c *Client) Send(message *Message) {
 	mailRequest.Scheme = "https"
 	mailRequest.Version = "2015-11-23"
 	mailRequest.RegionId = "cn-hangzhou"
-	mailRequest.QueryParams["AccountName"] = os.Getenv("MAIL_FROM")
-	mailRequest.QueryParams["FromAlias"] = os.Getenv("MAIL_FROM_NAME")
+	mailRequest.QueryParams["AccountName"] = c.cfg.MailFrom
+	mailRequest.QueryParams["FromAlias"] = c.cfg.MailFromName
 	mailRequest.QueryParams["AddressType"] = "1"
 	mailRequest.QueryParams["ReplyToAddress"] = "false"
 	mailRequest.QueryParams["ToAddress"] = message.ToAddress

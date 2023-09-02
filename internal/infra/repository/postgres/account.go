@@ -28,6 +28,10 @@ func toEntity(a *ent.Account) *entity.Account {
 	}
 }
 
+func NewAccountRepository(client *ent.Client) *AccountRepository {
+	return &AccountRepository{client}
+}
+
 func (repo *AccountRepository) FindByEmail(email string) *entity.Account {
 	if res := repo.Account.Query().Where(account.Email(email)).FirstX(context.Background()); res != nil {
 		return toEntity(res)

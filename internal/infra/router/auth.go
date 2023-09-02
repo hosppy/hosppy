@@ -10,12 +10,12 @@ import (
 
 const SessionKey = "session"
 
-func (a *AccountRouter) Authenticate(c echo.Context) error {
+func (r *AccountRouter) Authenticate(c echo.Context) error {
 	form := new(api.LoginForm)
 	if err := c.Bind(form); err != nil {
 		return err
 	}
-	account, ok := a.accountService.UsernamePasswordAuthenticate(form.Email, form.Password)
+	account, ok := r.accountService.UsernamePasswordAuthenticate(form.Email, form.Password)
 	if !ok {
 		return c.JSON(http.StatusBadRequest, api.BadCredentialStatus)
 	}

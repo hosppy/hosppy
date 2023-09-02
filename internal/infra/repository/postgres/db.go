@@ -5,26 +5,16 @@ import (
 	"entgo.io/ent/dialect"
 	entsql "entgo.io/ent/dialect/sql"
 	"github.com/hosppy/oxcoding/ent"
+	"github.com/hosppy/oxcoding/internal/config"
 	_ "github.com/jackc/pgx/v5/stdlib"
 	"log/slog"
-	"os"
 )
 
-type DB struct {
-	*ent.Client
-}
-
-func New() *DB {
-	db, err := sql.Open("pgx", os.Getenv("DSN"))
+func NewClient(cfg *config.Config) *ent.Client {
+	db, err := sql.Open("pgx", cfg.DSN)
 	if err != nil {
 		slog.Error("cannot connect database", err)
 	}
 	driver := entsql.OpenDB(dialect.Postgres, db)
-	client := ent.NewClient(ent.Driver(driver))
-
-	return &DB{client}
-}
-
-func (db *DB) NewAccountRepository() *AccountRepository {
-	return &AccountRepository{db.Client}
+	return ent.NewClient(ent.Driver(driver))
 }
