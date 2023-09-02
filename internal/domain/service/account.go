@@ -4,7 +4,7 @@ import (
 	"github.com/hosppy/oxcoding/internal/domain/entity"
 	"github.com/hosppy/oxcoding/internal/domain/repository"
 	"github.com/hosppy/oxcoding/internal/infra/mail"
-	"github.com/hosppy/oxcoding/internal/service/passwordhash"
+	"github.com/hosppy/oxcoding/internal/passwordhash"
 )
 
 type AccountService struct {

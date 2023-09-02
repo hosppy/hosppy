@@ -21,6 +21,7 @@ type Routes struct {
 
 func New(lc fx.Lifecycle, routes Routes, cfg *config.Config) *echo.Echo {
 	e := echo.New()
+	e.HideBanner = true
 
 	e.Use(slogecho.New(slog.Default()))
 	e.Pre(middleware.RemoveTrailingSlashWithConfig(middleware.TrailingSlashConfig{RedirectCode: http.StatusMovedPermanently}))
