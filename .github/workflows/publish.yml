@@ -36,10 +36,10 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version-file: ${{ env.WORKING_DIRECTORY }}/.nvmrc
-          cache: npm
-          cache-dependency-path: ${{ env.WORKING_DIRECTORY }}/package-lock.json
+          cache: pnpm
+          cache-dependency-path: ${{ env.WORKING_DIRECTORY }}/pnpm-lock.yaml
 
-      - run: npm ci && npm run build
+      - run: pnpm i && pnpm run build
 
       - name: Login to private registry
         uses: docker/login-action@v2
