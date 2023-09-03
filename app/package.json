@@ -25,7 +25,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"dotenv": "^16.1.4",
+		"dotenv": "^16.3.1",
 		"dotenv-expand": "^10.0.0",
 		"svelte-local-storage-store": "^0.5.0"
 	}
