@@ -15,7 +15,7 @@
 		"@iconify-json/uim": "^1.1.5",
 		"@sveltejs/adapter-node": "^1.2.4",
 		"@sveltejs/kit": "^1.24.0",
-		"@unocss/preset-icons": "^0.53.1",
+		"@unocss/preset-icons": "^0.55.6",
 		"@unocss/preset-uno": "^0.53.1",
 		"prettier": "^2.8.8",
 		"prettier-plugin-svelte": "^2.10.1",

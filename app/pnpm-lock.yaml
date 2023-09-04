@@ -26,8 +26,8 @@ devDependencies:
     specifier: ^1.24.0
     version: 1.24.0(svelte@3.59.2)(vite@4.4.9)
   '@unocss/preset-icons':
-    specifier: ^0.53.1
-    version: 0.53.6
+    specifier: ^0.55.6
+    version: 0.55.6
   '@unocss/preset-uno':
     specifier: ^0.53.1
     version: 0.53.6
@@ -552,6 +552,10 @@ packages:
     resolution: {integrity: sha512-wuaLjWCzKUisHUxo4pjIdzcimdSmVa2hMHA3V7wVFBiSFX96/s7l0bvhHGFF/gMjbOnvJ+y+lBl3VKqcj9kwbA==}
     dev: true
 
+  /@unocss/core@0.55.6:
+    resolution: {integrity: sha512-7Q2N7fyERsxyzdyo+EaNoIav1hKKOyoGTWdNZqKQImuS8aQhNUmI/UpVFQk/tMvdwS94YLGYFKEqqzNFsl+Kbw==}
+    dev: true
+
   /@unocss/extractor-arbitrary-variants@0.53.6:
     resolution: {integrity: sha512-5MQD/9pIflZT5LXFx6qFUgPuVszFj+Pyq97UPI1YH4Lf4prDpfUtR4vKrXeMQv0XFvXqKluIWovgG9c6nrpg9w==}
     dependencies:
@@ -595,11 +599,11 @@ packages:
       - supports-color
     dev: true
 
-  /@unocss/preset-icons@0.53.6:
-    resolution: {integrity: sha512-UhP+7pQCCKxtv7x4jzHd9LnbLUDRLWLq7iyLAMxI9Bq7Qg/XYaygeFUk1RlYBb+um0CGvU3jAVuXzwwlX3WncQ==}
+  /@unocss/preset-icons@0.55.6:
+    resolution: {integrity: sha512-tSlJMbqkTTytndMrj4MajRq5p5BVF3we/h9FYHuPWCIHc5ZyeBfArQH8hdOz5DJ7/bYgGT2sGX0qc4cDbQxCmw==}
     dependencies:
       '@iconify/utils': 2.1.9
-      '@unocss/core': 0.53.6
+      '@unocss/core': 0.55.6
       ofetch: 1.3.3
     transitivePeerDependencies:
       - supports-color
