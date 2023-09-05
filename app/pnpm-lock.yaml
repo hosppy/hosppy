@@ -26,8 +26,8 @@ devDependencies:
     specifier: ^1.24.0
     version: 1.24.0(svelte@4.2.0)(vite@4.4.9)
   '@unocss/preset-icons':
-    specifier: ^0.53.1
-    version: 0.53.6
+    specifier: ^0.55.7
+    version: 0.55.7
   '@unocss/preset-uno':
     specifier: ^0.53.1
     version: 0.53.6
@@ -587,16 +587,6 @@ packages:
     resolution: {integrity: sha512-L1sNw3DyM4mymIm4DBTTTOllk8LmhYlWMgDlaAW2MYWygjqDCsp99wRKT2175Ya5xHYBA6XetMoBryZD23qJYQ==}
     dependencies:
       '@unocss/core': 0.55.7
-    dev: true
-
-  /@unocss/preset-icons@0.53.6:
-    resolution: {integrity: sha512-UhP+7pQCCKxtv7x4jzHd9LnbLUDRLWLq7iyLAMxI9Bq7Qg/XYaygeFUk1RlYBb+um0CGvU3jAVuXzwwlX3WncQ==}
-    dependencies:
-      '@iconify/utils': 2.1.9
-      '@unocss/core': 0.53.6
-      ofetch: 1.3.3
-    transitivePeerDependencies:
-      - supports-color
     dev: true
 
   /@unocss/preset-icons@0.55.7:
