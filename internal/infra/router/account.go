@@ -20,7 +20,7 @@ func (r *AccountRouter) Register(c echo.Context) error {
 	if err := c.Bind(&form); err != nil {
 		return err
 	}
-	r.accountService.Create(form.ToAccount())
+	r.accountService.Create(form.ToAccountDTO())
 	c.Response().WriteHeader(http.StatusCreated)
 	return nil
 }

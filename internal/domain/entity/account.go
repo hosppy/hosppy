@@ -1,6 +1,8 @@
 package entity
 
 import (
+	"golang.org/x/crypto/bcrypt"
+	"regexp"
 	"time"
 )
 
@@ -13,6 +15,12 @@ type Account struct {
 	CreatedAt    time.Time
 	PasswordHash string
 	AvatarURL    string
+}
 
-	Password string
+func (a *Account) CheckPassword(password string) bool {
+	var re = regexp.MustCompile("{.*?}")
+	hash := re.ReplaceAllString(a.PasswordHash, "")
+
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+	return err == nil
 }

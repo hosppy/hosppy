@@ -14,8 +14,8 @@ type RegisterForm struct {
 	Name     string `json:"name"`
 }
 
-func (form RegisterForm) ToAccount() *entity.Account {
-	return &entity.Account{
+func (form RegisterForm) ToAccountDTO() *entity.AccountDTO {
+	return &entity.AccountDTO{
 		Email:    form.Email,
 		Password: form.Password,
 		Name:     form.Name,

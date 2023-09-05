@@ -39,7 +39,7 @@ func (repo *AccountRepository) FindByEmail(email string) *entity.Account {
 	return nil
 }
 
-func (repo *AccountRepository) Create(entity *entity.Account) *entity.Account {
+func (repo *AccountRepository) Create(ctx context.Context, entity *entity.Account) *entity.Account {
 	create := repo.Account.
 		Create().
 		SetEmail(entity.Email).
@@ -51,5 +51,26 @@ func (repo *AccountRepository) Create(entity *entity.Account) *entity.Account {
 	if len(entity.PhoneNumber) > 0 {
 		create.SetPhoneNumber(entity.PhoneNumber)
 	}
-	return toEntity(create.SaveX(context.Background()))
+	return toEntity(create.SaveX(ctx))
+}
+
+func (repo *AccountRepository) Update(ctx context.Context, entity *entity.Account) *entity.Account {
+	update := repo.Account.
+		UpdateOneID(entity.ID).
+		SetEmail(entity.Email).
+		SetName(entity.Name).
+		SetActive(entity.Active).
+		SetPasswordHash(entity.PasswordHash).
+		SetAvatarURL(entity.AvatarURL)
+	if len(entity.PhoneNumber) > 0 {
+		update.SetPhoneNumber(entity.PhoneNumber)
+	}
+	return toEntity(update.SaveX(ctx))
+}
+
+func (repo *AccountRepository) Save(ctx context.Context, entity *entity.Account) *entity.Account {
+	if entity.ID > 0 {
+		return repo.Update(ctx, entity)
+	}
+	return repo.Create(ctx, entity)
 }
