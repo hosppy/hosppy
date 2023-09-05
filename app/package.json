@@ -28,6 +28,6 @@
 	"dependencies": {
 		"dotenv": "^16.3.1",
 		"dotenv-expand": "^10.0.0",
-		"svelte-local-storage-store": "^0.5.0"
+		"svelte-local-storage-store": "^0.6.0"
 	}
 }
