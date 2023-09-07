@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	"github.com/hosppy/oxcoding/internal/domain/entity"
+	"github.com/hosppy/oxcoding/internal/domain/model"
 	"github.com/hosppy/oxcoding/internal/domain/repository"
 	"github.com/hosppy/oxcoding/internal/infra/mail"
 )
@@ -16,24 +16,31 @@ func NewAccountService(accountRepository repository.AccountRepository, mailClien
 	return &AccountService{accountRepository, mailClient}
 }
 
-func (a *AccountService) UsernamePasswordAuthenticate(username string, password string) (*entity.Account, bool) {
-	foundAccount := a.accountRepository.FindByEmail(username)
-
-	if foundAccount != nil && foundAccount.CheckPassword(password) {
-		return foundAccount, true
+func (a *AccountService) UsernamePasswordAuthenticate(username string, password string) (*model.Account, bool) {
+	existingAccount := a.accountRepository.FindByEmail(context.Background(), username)
+	if existingAccount != nil && existingAccount.Password.Check(password) {
+		return existingAccount, true
 	}
 	return nil, false
 }
 
-func (a *AccountService) Create(account *entity.AccountDTO) *entity.Account {
-	foundAccount := a.accountRepository.FindByEmail(account.Email)
-	accountSave := account.ToModel()
-	// TODO send mail
-	if foundAccount == nil {
-		newAccount := a.accountRepository.Save(context.Background(), accountSave)
-		return newAccount
+func (a *AccountService) Create(name string, email string, password string) (*model.Account, error) {
+	ctx := context.Background()
+	existingAccount := a.accountRepository.FindByEmail(ctx, email)
+	hashedPassword, err := model.NewHashedPassword(password)
+	if err != nil {
+		return nil, err
 	}
-	foundAccount.PasswordHash = accountSave.PasswordHash
-	a.accountRepository.Save(context.Background(), foundAccount)
-	return foundAccount
+
+	// TODO send mail
+	if existingAccount == nil {
+		account := &model.Account{Name: name, Email: email, Password: hashedPassword}
+		newAccount := a.accountRepository.Save(ctx, account)
+		return newAccount, nil
+	}
+
+	// create a new account
+	existingAccount.Password = hashedPassword
+	a.accountRepository.Save(context.Background(), existingAccount)
+	return existingAccount, nil
 }
