@@ -10,11 +10,7 @@ type Password struct {
 	Hashed string
 }
 
-func NewPassword(password string) *Password {
-	return &Password{Raw: password}
-}
-
-func NewHashedPassword(password string) (*Password, error) {
+func NewPassword(password string) (*Password, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
 	if err != nil {
 		return nil, err
@@ -22,13 +18,12 @@ func NewHashedPassword(password string) (*Password, error) {
 	return &Password{Raw: password, Hashed: "{bcrypt}" + string(bytes)}, nil
 }
 
-func (p *Password) IsValid() bool {
-	return p.Check(p.Raw)
-}
-
 func (p *Password) Check(password string) bool {
-	index := strings.Index(password, "}")
-	passwordHash := p.Hashed[index:]
-	err := bcrypt.CompareHashAndPassword([]byte(passwordHash), []byte(p.Raw))
+	index := strings.Index(p.Hashed, "}")
+	passwordHash := p.Hashed[0:]
+	if index > - 1 {
+		passwordHash = p.Hashed[index:]
+	}
+	err := bcrypt.CompareHashAndPassword([]byte(passwordHash), []byte(password))
 	return err == nil
 }

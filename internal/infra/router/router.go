@@ -19,11 +19,11 @@ type Routes struct {
 	*AccountRouter
 }
 
-func New(lc fx.Lifecycle, routes Routes, cfg *config.Config) *echo.Echo {
+func New(lc fx.Lifecycle, routes Routes, cfg *config.Config, logger *slog.Logger) *echo.Echo {
 	e := echo.New()
 	e.HideBanner = true
 
-	e.Use(slogecho.New(slog.Default()))
+	e.Use(slogecho.New(logger))
 	e.Pre(middleware.RemoveTrailingSlashWithConfig(middleware.TrailingSlashConfig{RedirectCode: http.StatusMovedPermanently}))
 	e.Use(middleware.Recover())
 	e.Use(session.Middleware(sessions.NewCookieStore([]byte(cfg.SessionSecret))))

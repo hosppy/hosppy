@@ -27,7 +27,7 @@ func (a *AccountService) UsernamePasswordAuthenticate(username string, password 
 func (a *AccountService) Create(name string, email string, password string) (*model.Account, error) {
 	ctx := context.Background()
 	existingAccount := a.accountRepository.FindByEmail(ctx, email)
-	hashedPassword, err := model.NewHashedPassword(password)
+	hashedPassword, err := model.NewPassword(password)
 	if err != nil {
 		return nil, err
 	}
