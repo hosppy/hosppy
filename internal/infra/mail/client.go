@@ -35,9 +35,9 @@ func (c *Client) Send(mail *model.Mail) {
 	mailRequest.QueryParams["FromAlias"] = c.cfg.MailFromName
 	mailRequest.QueryParams["AddressType"] = "1"
 	mailRequest.QueryParams["ReplyToAddress"] = "false"
-	mailRequest.QueryParams["ToAddress"] = mail.ToAddress
+	mailRequest.QueryParams["To"] = mail.To
 	mailRequest.QueryParams["Subject"] = mail.Subject
-	mailRequest.QueryParams["HtmlBody"] = mail.HtmlBody
+	mailRequest.QueryParams["Html"] = mail.Html
 
 	_, err := c.ProcessCommonRequest(mailRequest)
 	if err != nil {

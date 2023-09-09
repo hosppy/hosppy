@@ -18,12 +18,9 @@ func main() {
 		fx.Provide(
 			logger.New,
 			config.New,
-			fx.Annotate(mail.NewClient, fx.As(new(service.MailService))),
 			postgres.NewClient,
-			fx.Annotate(
-				postgres.NewAccountRepository,
-				fx.As(new(repository.AccountRepository)),
-			),
+			fx.Annotate(postgres.NewAccountRepository, fx.As(new(repository.AccountRepository))),
+			fx.Annotate(mail.NewClient, fx.As(new(service.MailService))),
 			service.NewAccountService,
 			router.NewAccountRouter,
 		),

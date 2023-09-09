@@ -6,6 +6,7 @@ import (
 	"github.com/hosppy/oxcoding/internal/config"
 	"github.com/hosppy/oxcoding/internal/domain/model"
 	"github.com/hosppy/oxcoding/internal/domain/repository"
+	"github.com/hosppy/oxcoding/internal/sign"
 	"log/slog"
 	"text/template"
 )
@@ -64,17 +65,22 @@ func (a *AccountService) SendActivateMail(account *model.Account) {
 		slog.Error("parse activate mail template error", err)
 		return
 	}
+	token, err := sign.GenerateEmailConfirmationToken(account.ID, account.Email, a.cfg.SigningSecret)
+	if err != nil {
+		slog.Error("cannot generate email confirmation token", err)
+		return
+	}
 	var buf bytes.Buffer
 	err = tmpl.Execute(&buf, map[string]string{
 		"Name": account.Name,
-		"Link": a.cfg.WebDomain + "/activate/",
+		"Link": a.cfg.WebDomain + "/activate/" + token,
 	})
 	if err != nil {
 		slog.Error("output activate mail template error", err)
 	}
 	a.mailService.Send(&model.Mail{
-		ToAddress: account.Email,
-		Subject:   "Activate your Hosppy account",
-		HtmlBody:  buf.String(),
+		To:      account.Email,
+		Subject: "Activate your Hosppy account",
+		Html:    buf.String(),
 	})
 }
