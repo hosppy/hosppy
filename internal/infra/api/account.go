@@ -2,7 +2,7 @@ package api
 
 import "time"
 
-type CreateAccountResp struct {
+type AccountCreateResp struct {
 	ID          int       `json:"id"`
 	Name        string    `json:"name"`
 	Email       string    `json:"email"`

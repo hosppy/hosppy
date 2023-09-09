@@ -1,6 +1,6 @@
-package mail
+package model
 
-type Message struct {
+type Mail struct {
 	ToAddress string
 	Subject   string
 	HtmlBody  string

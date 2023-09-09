@@ -18,7 +18,7 @@ func main() {
 		fx.Provide(
 			logger.New,
 			config.New,
-			mail.NewClient,
+			fx.Annotate(mail.NewClient, fx.As(new(service.MailService))),
 			postgres.NewClient,
 			fx.Annotate(
 				postgres.NewAccountRepository,

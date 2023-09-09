@@ -4,6 +4,7 @@ import (
 	"github.com/aliyun/alibaba-cloud-sdk-go/sdk"
 	"github.com/aliyun/alibaba-cloud-sdk-go/sdk/requests"
 	"github.com/hosppy/oxcoding/internal/config"
+	"github.com/hosppy/oxcoding/internal/domain/model"
 	"log/slog"
 )
 
@@ -20,7 +21,7 @@ func NewClient(cfg *config.Config) (*Client, error) {
 	return &Client{client, cfg}, nil
 }
 
-func (c *Client) Send(message *Message) {
+func (c *Client) Send(mail *model.Mail) {
 	requests.NewCommonRequest()
 	mailRequest := requests.NewCommonRequest()
 	mailRequest.Method = "POST"
@@ -34,9 +35,9 @@ func (c *Client) Send(message *Message) {
 	mailRequest.QueryParams["FromAlias"] = c.cfg.MailFromName
 	mailRequest.QueryParams["AddressType"] = "1"
 	mailRequest.QueryParams["ReplyToAddress"] = "false"
-	mailRequest.QueryParams["ToAddress"] = message.ToAddress
-	mailRequest.QueryParams["Subject"] = message.Subject
-	mailRequest.QueryParams["HtmlBody"] = message.HtmlBody
+	mailRequest.QueryParams["ToAddress"] = mail.ToAddress
+	mailRequest.QueryParams["Subject"] = mail.Subject
+	mailRequest.QueryParams["HtmlBody"] = mail.HtmlBody
 
 	_, err := c.ProcessCommonRequest(mailRequest)
 	if err != nil {
