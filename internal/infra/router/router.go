@@ -33,8 +33,7 @@ func New(lc fx.Lifecycle, routes Routes, cfg *config.Config, logger *slog.Logger
 
 	lc.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {
-			address := config.GetOrDefault("ADDRESS", ":8080")
-			if err := e.Start(address); err != nil {
+			if err := e.Start(cfg.Address); err != nil {
 				return err
 			}
 			return nil

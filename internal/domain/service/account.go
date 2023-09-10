@@ -29,8 +29,15 @@ func (a *AccountService) UsernamePasswordAuthenticate(username string, password 
 	return nil, false
 }
 
-func (a *AccountService) Create(command *model.AccountCreateCommand) (*model.Account, error) {
-	ctx := context.Background()
+func (a *AccountService) Register(command *model.AccountCreateCommand) (*model.Account, error) {
+	account, err := a.Create(context.Background(), command)
+	if err != nil {
+		return nil, err
+	}
+	go a.SendActivateMail(account)
+	return account, err
+}
+func (a *AccountService) Create(ctx context.Context, command *model.AccountCreateCommand) (*model.Account, error) {
 	existingAccount := a.accountRepository.FindByEmail(ctx, command.Email)
 	hashedPassword, err := model.NewPassword(command.Password)
 	if err != nil {

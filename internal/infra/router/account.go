@@ -20,12 +20,10 @@ func (r *AccountRouter) Register(c echo.Context) error {
 	if err := c.Bind(&form); err != nil {
 		return err
 	}
-	account, err := r.accountService.Create(form.ToAccountCreateCommand())
+	account, err := r.accountService.Register(form.ToAccountCreateCommand())
 	if err != nil {
 		return err
 	}
-
-	go r.accountService.SendActivateMail(account)
 
 	return c.JSON(http.StatusCreated, api.AccountCreateResp{
 		ID:          account.ID,
