@@ -60,12 +60,12 @@ func (a *AccountService) Create(ctx context.Context, command *model.AccountCreat
 func (a *AccountService) SendActivateMail(account *model.Account) {
 	html := `
 <div>
-    <p>Hi {{ .Name }}, and welcome to Oxcoding!</p><a href="{{ .Link }}">Please click here to finish setting up your account.</a>
+    <p>Hi {{.Name}}, and welcome to Oxcoding!</p><a href="{{.Link}}">Please click here to finish setting up your account.</a>
 </div>
 <br>
 <br>
 <div>If you have trouble clicking on the link, please copy and paste this link into your browser: <br/>
-    <a href="{{ .Link }}">{{ .Link }}</a>
+    <a href="{{.Link}}">{{.Link}}</a>
 </div>`
 	tmpl, err := template.New("mail").Parse(html)
 	if err != nil {
