@@ -1,6 +1,8 @@
 package api
 
-import "github.com/hosppy/oxcoding/internal/domain/model"
+import (
+	"github.com/hosppy/oxcoding/internal/domain/command"
+)
 
 type LoginForm struct {
 	Email      string `json:"email"`
@@ -14,8 +16,8 @@ type RegisterForm struct {
 	Password string `json:"password"`
 }
 
-func (form *RegisterForm) ToAccountCreateCommand() *model.AccountCreateCommand {
-	return &model.AccountCreateCommand{
+func (form *RegisterForm) ToCreateAccountCommand() *command.CreateAccountCommand {
+	return &command.CreateAccountCommand{
 		Name:     form.Name,
 		Email:    form.Email,
 		Password: form.Password,

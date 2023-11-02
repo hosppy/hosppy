@@ -1,8 +1,9 @@
 package model
 
 import (
-	"golang.org/x/crypto/bcrypt"
 	"strings"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 type Password struct {
@@ -20,10 +21,8 @@ func NewPassword(password string) (*Password, error) {
 
 func (p *Password) Check(password string) bool {
 	index := strings.Index(p.Hashed, "}")
-	passwordHash := p.Hashed[0:]
-	if index > - 1 {
-		passwordHash = p.Hashed[index:]
-	}
+	index = max(index, 0)
+	passwordHash := p.Hashed[index:]
 	err := bcrypt.CompareHashAndPassword([]byte(passwordHash), []byte(password))
 	return err == nil
 }

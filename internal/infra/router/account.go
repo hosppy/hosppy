@@ -1,10 +1,11 @@
 package router
 
 import (
+	"net/http"
+
 	"github.com/hosppy/oxcoding/internal/domain/service"
 	"github.com/hosppy/oxcoding/internal/infra/api"
 	"github.com/labstack/echo/v4"
-	"net/http"
 )
 
 type AccountRouter struct {
@@ -20,7 +21,7 @@ func (r *AccountRouter) Register(c echo.Context) error {
 	if err := c.Bind(&form); err != nil {
 		return err
 	}
-	account, err := r.accountService.Register(form.ToAccountCreateCommand())
+	account, err := r.accountService.Register(form.ToCreateAccountCommand())
 	if err != nil {
 		return err
 	}

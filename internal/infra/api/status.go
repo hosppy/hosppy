@@ -1,13 +1,13 @@
 package api
 
 type ResponseStatus struct {
-	Code    string `json:"code"`
+	Status    string `json:"status"`
 	Message string `json:"message"`
 }
 
 var (
 	BadCredentialStatus = ResponseStatus{
-		Code:    "BadCredential",
+		Status:    "BadCredential",
 		Message: "invalid username or password",
 	}
 )

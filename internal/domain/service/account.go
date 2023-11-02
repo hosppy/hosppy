@@ -3,12 +3,14 @@ package service
 import (
 	"bytes"
 	"context"
+	"log/slog"
+	"text/template"
+
 	"github.com/hosppy/oxcoding/internal/config"
+	"github.com/hosppy/oxcoding/internal/domain/command"
 	"github.com/hosppy/oxcoding/internal/domain/model"
 	"github.com/hosppy/oxcoding/internal/domain/repository"
 	"github.com/hosppy/oxcoding/internal/sign"
-	"log/slog"
-	"text/template"
 )
 
 type AccountService struct {
@@ -29,7 +31,7 @@ func (a *AccountService) UsernamePasswordAuthenticate(username string, password 
 	return nil, false
 }
 
-func (a *AccountService) Register(command *model.AccountCreateCommand) (*model.Account, error) {
+func (a *AccountService) Register(command *command.CreateAccountCommand) (*model.Account, error) {
 	account, err := a.Create(context.Background(), command)
 	if err != nil {
 		return nil, err
@@ -37,7 +39,7 @@ func (a *AccountService) Register(command *model.AccountCreateCommand) (*model.A
 	go a.SendActivateMail(account)
 	return account, err
 }
-func (a *AccountService) Create(ctx context.Context, command *model.AccountCreateCommand) (*model.Account, error) {
+func (a *AccountService) Create(ctx context.Context, command *command.CreateAccountCommand) (*model.Account, error) {
 	existingAccount := a.accountRepository.FindByEmail(ctx, command.Email)
 	hashedPassword, err := model.NewPassword(command.Password)
 	if err != nil {

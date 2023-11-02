@@ -14,9 +14,3 @@ type Account struct {
 	AvatarURL   string
 	Password    *Password
 }
-
-type AccountCreateCommand struct {
-	Name     string
-	Email    string
-	Password string
-}
