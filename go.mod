@@ -3,7 +3,7 @@ module github.com/hosppy/oxcoding
 go 1.21
 
 require (
-	entgo.io/ent v0.12.3
+	entgo.io/ent v0.12.5
 	github.com/aliyun/alibaba-cloud-sdk-go v1.62.533
 	github.com/gorilla/sessions v1.2.1
 	github.com/jackc/pgx/v5 v5.4.3
@@ -16,7 +16,7 @@ require (
 )
 
 require (
-	ariga.io/atlas v0.10.2-0.20230427182402-87a07dfb83bf // indirect
+	ariga.io/atlas v0.14.1-0.20230918065911-83ad451a4935 // indirect
 	github.com/agext/levenshtein v1.2.1 // indirect
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
 	github.com/go-openapi/inflect v0.19.0 // indirect
