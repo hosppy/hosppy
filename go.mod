@@ -4,7 +4,7 @@ go 1.21
 
 require (
 	entgo.io/ent v0.12.3
-	github.com/aliyun/alibaba-cloud-sdk-go v1.62.533
+	github.com/aliyun/alibaba-cloud-sdk-go v1.62.612
 	github.com/gorilla/sessions v1.2.1
 	github.com/jackc/pgx/v5 v5.4.3
 	github.com/joho/godotenv v1.5.1
