@@ -23,6 +23,7 @@ func main() {
 			fx.Annotate(mail.NewClient, fx.As(new(service.MailService))),
 			service.NewAccountService,
 			web.NewAccountRouter,
+			web.NewAuthRouter,
 		),
 		fx.Invoke(web.New),
 	)

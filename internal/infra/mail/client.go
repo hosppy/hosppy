@@ -5,6 +5,7 @@ import (
 	"github.com/aliyun/alibaba-cloud-sdk-go/sdk/requests"
 	"github.com/hosppy/oxcoding/internal/config"
 	"github.com/hosppy/oxcoding/internal/domain/model"
+	"github.com/hosppy/oxcoding/internal/domain/service"
 	"log/slog"
 )
 
@@ -12,6 +13,8 @@ type Client struct {
 	*sdk.Client
 	cfg *config.Config
 }
+
+var _ service.MailService = (*Client)(nil)
 
 func NewClient(cfg *config.Config) (*Client, error) {
 	client, err := sdk.NewClientWithAccessKey("cn-hangzhou", cfg.AliyunAccessKey, cfg.AliyunAccessSecret)

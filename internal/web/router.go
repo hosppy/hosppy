@@ -17,6 +17,7 @@ type Routes struct {
 	fx.In
 
 	*AccountRouter
+	*AuthRouter
 }
 
 func New(lc fx.Lifecycle, routes Routes, cfg *config.Config, logger *slog.Logger) *echo.Echo {
@@ -28,7 +29,7 @@ func New(lc fx.Lifecycle, routes Routes, cfg *config.Config, logger *slog.Logger
 	e.Use(middleware.Recover())
 	e.Use(session.Middleware(sessions.NewCookieStore([]byte(cfg.SessionSecret))))
 
-	e.POST("/authenticate", routes.AccountRouter.Authenticate)
+	e.POST("/authenticate", routes.AuthRouter.Authenticate)
 	e.POST("/accounts", routes.AccountRouter.Register)
 
 	lc.Append(fx.Hook{

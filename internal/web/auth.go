@@ -2,6 +2,7 @@ package web
 
 import (
 	"github.com/gorilla/sessions"
+	"github.com/hosppy/oxcoding/internal/domain/service"
 	"github.com/hosppy/oxcoding/internal/infra/api"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
@@ -11,7 +12,15 @@ import (
 
 const SessionKey = "session"
 
-func (r *AccountRouter) Authenticate(c echo.Context) error {
+type AuthRouter struct {
+	accountService *service.AccountService
+}
+
+func NewAuthRouter(accountService *service.AccountService) *AuthRouter {
+	return &AuthRouter{accountService}
+}
+
+func (r *AuthRouter) Authenticate(c echo.Context) error {
 	form := new(api.LoginForm)
 	if err := c.Bind(form); err != nil {
 		return err
