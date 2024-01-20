@@ -49,13 +49,19 @@ func (a *AccountService) Create(ctx context.Context, command *command.CreateAcco
 	if existingAccount == nil {
 		// create a new account
 		account := &model.Account{Name: command.Name, Email: command.Email, Password: hashedPassword}
-		newAccount := a.accountRepository.Save(ctx, account)
+		newAccount, err := a.accountRepository.Create(ctx, account)
+		if err != nil {
+			return nil, err
+		}
 		return newAccount, nil
 	}
 
 	// update password
 	existingAccount.Password = hashedPassword
-	a.accountRepository.Save(context.Background(), existingAccount)
+	_, err = a.accountRepository.Update(context.Background(), existingAccount)
+	if err != nil {
+		return nil, err
+	}
 	return existingAccount, nil
 }
 

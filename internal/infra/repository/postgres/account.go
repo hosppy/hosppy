@@ -39,7 +39,7 @@ func (repo *AccountRepository) FindByEmail(ctx context.Context, email string) *m
 	return nil
 }
 
-func (repo *AccountRepository) Create(ctx context.Context, model *model.Account) *model.Account {
+func (repo *AccountRepository) Create(ctx context.Context, model *model.Account) (*model.Account, error) {
 	create := repo.Account.
 		Create().
 		SetEmail(model.Email).
@@ -51,10 +51,14 @@ func (repo *AccountRepository) Create(ctx context.Context, model *model.Account)
 	if len(model.PhoneNumber) > 0 {
 		create.SetPhoneNumber(model.PhoneNumber)
 	}
-	return toModel(create.SaveX(ctx))
+	save, err := create.Save(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return toModel(save), nil
 }
 
-func (repo *AccountRepository) Update(ctx context.Context, model *model.Account) *model.Account {
+func (repo *AccountRepository) Update(ctx context.Context, model *model.Account) (*model.Account, error) {
 	update := repo.Account.
 		UpdateOneID(model.ID).
 		SetEmail(model.Email).
@@ -65,12 +69,9 @@ func (repo *AccountRepository) Update(ctx context.Context, model *model.Account)
 	if len(model.PhoneNumber) > 0 {
 		update.SetPhoneNumber(model.PhoneNumber)
 	}
-	return toModel(update.SaveX(ctx))
-}
-
-func (repo *AccountRepository) Save(ctx context.Context, model *model.Account) *model.Account {
-	if model.ID > 0 {
-		return repo.Update(ctx, model)
+	save, err := update.Save(ctx)
+	if err != nil {
+		return nil, err
 	}
-	return repo.Create(ctx, model)
+	return toModel(save), nil
 }
