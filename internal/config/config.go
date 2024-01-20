@@ -24,7 +24,7 @@ func New(logger *slog.Logger) *Config {
 		logger.Info("cannot found .env file")
 	}
 	return &Config{
-		Address:            GetOrDefault("ADDRESS", ":8080"),
+		Address:            GetOrDefault("ADDRESS", "127.0.0.1:8080"),
 		DSN:                os.Getenv("DSN"),
 		WebDomain:          os.Getenv("WEB_DOMAIN"),
 		SigningSecret:      os.Getenv("SIGNING_SECRET"),

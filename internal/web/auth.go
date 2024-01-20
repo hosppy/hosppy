@@ -1,4 +1,4 @@
-package router
+package web
 
 import (
 	"github.com/gorilla/sessions"
@@ -6,6 +6,7 @@ import (
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 	"net/http"
+	"time"
 )
 
 const SessionKey = "session"
@@ -17,7 +18,7 @@ func (r *AccountRouter) Authenticate(c echo.Context) error {
 	}
 	account, ok := r.accountService.UsernamePasswordAuthenticate(form.Email, form.Password)
 	if !ok {
-		return c.JSON(http.StatusBadRequest, api.BadCredentialStatus)
+		return c.JSON(http.StatusBadRequest, api.ResponseBadCredential)
 	}
 	sess, err := session.Get(SessionKey, c)
 	if err != nil {
@@ -25,7 +26,7 @@ func (r *AccountRouter) Authenticate(c echo.Context) error {
 	}
 	sess.Options = &sessions.Options{
 		Path:   "/",
-		MaxAge: 86400 * 7,
+		MaxAge: int(time.Hour) * 24 * 7,
 	}
 	sess.Values["accountId"] = account.ID
 	if err = sess.Save(c.Request(), c.Response()); err != nil {

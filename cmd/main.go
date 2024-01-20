@@ -7,8 +7,8 @@ import (
 	"github.com/hosppy/oxcoding/internal/domain/service"
 	"github.com/hosppy/oxcoding/internal/infra/mail"
 	"github.com/hosppy/oxcoding/internal/infra/repository/postgres"
-	"github.com/hosppy/oxcoding/internal/infra/router"
 	"github.com/hosppy/oxcoding/internal/logger"
+	"github.com/hosppy/oxcoding/internal/web"
 	"go.uber.org/fx"
 	"log/slog"
 )
@@ -22,9 +22,9 @@ func main() {
 			fx.Annotate(postgres.NewAccountRepository, fx.As(new(repository.AccountRepository))),
 			fx.Annotate(mail.NewClient, fx.As(new(service.MailService))),
 			service.NewAccountService,
-			router.NewAccountRouter,
+			web.NewAccountRouter,
 		),
-		fx.Invoke(router.New),
+		fx.Invoke(web.New),
 	)
 
 	if err := app.Start(context.Background()); err != nil {
