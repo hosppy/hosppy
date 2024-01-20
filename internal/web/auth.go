@@ -3,7 +3,7 @@ package web
 import (
 	"github.com/gorilla/sessions"
 	"github.com/hosppy/oxcoding/internal/domain/service"
-	"github.com/hosppy/oxcoding/internal/infra/api"
+	api2 "github.com/hosppy/oxcoding/internal/web/api"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 	"net/http"
@@ -21,13 +21,13 @@ func NewAuthRouter(accountService *service.AccountService) *AuthRouter {
 }
 
 func (r *AuthRouter) Authenticate(c echo.Context) error {
-	form := new(api.LoginForm)
+	form := new(api2.LoginForm)
 	if err := c.Bind(form); err != nil {
 		return err
 	}
 	account, ok := r.accountService.UsernamePasswordAuthenticate(form.Email, form.Password)
 	if !ok {
-		return c.JSON(http.StatusBadRequest, api.ResponseBadCredential)
+		return c.JSON(http.StatusBadRequest, api2.ResponseBadCredential)
 	}
 	sess, err := session.Get(SessionKey, c)
 	if err != nil {
